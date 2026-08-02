@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aaryaman Ahluwalia — Data → Story → Growth</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0C0D12;
+    --panel:#15171F;
+    --panel-2:#1C1F29;
+    --line:#2A2E3A;
+    --text:#F3F3EE;
+    --muted:#9096A5;
+    --blue:#5B8DFF;
+    --gold:#F4C63D;
+    --font-display:'Space Grotesk', sans-serif;
+    --font-body:'Inter', sans-serif;
+    --font-mono:'IBM Plex Mono', monospace;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+
+  html{scroll-behavior:smooth;}
+
+  body{
+    background:var(--ink);
+    color:var(--text);
+    font-family:var(--font-body);
+    overflow-x:hidden;
+  }
+
+  ::selection{background:var(--blue);color:var(--ink);}
+
+  a{color:inherit;text-decoration:none;}
+
+  .wrap{max-width:1180px;margin:0 auto;padding:0 32px;}
+
+  /* ---------- NAV ---------- */
+  nav{
+    position:fixed;top:0;left:0;right:0;z-index:100;
+    background:rgba(12,13,18,0.75);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  nav .wrap{
+    display:flex;align-items:center;justify-content:space-between;
+    height:68px;
+  }
+  .brand{
+    font-family:var(--font-mono);
+    font-size:14px;
+    letter-spacing:0.02em;
+    color:var(--text);
+  }
+  .brand span{color:var(--gold);}
+  .nav-links{display:flex;gap:32px;font-size:14px;color:var(--muted);}
+  .nav-links a{transition:color .2s;}
+  .nav-links a:hover{color:var(--text);}
+  .nav-cta{
+    font-family:var(--font-mono);
+    font-size:13px;
+    padding:9px 18px;
+    border:1px solid var(--blue);
+    border-radius:2px;
+    color:var(--blue);
+    transition:all .2s;
+  }
+  .nav-cta:hover{background:var(--blue);color:var(--ink);}
+  @media (max-width:760px){ .nav-links{display:none;} }
+
+  /* ---------- HERO ---------- */
+  header{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    position:relative;
+    padding-top:68px;
+  }
+  header::before{
+    content:"";
+    position:absolute;inset:0;
+    background:
+      radial-gradient(600px 300px at 85% 15%, rgba(91,141,255,0.14), transparent 70%),
+      radial-gradient(500px 260px at 10% 85%, rgba(244,198,61,0.09), transparent 70%);
+    pointer-events:none;
+  }
+  .eyebrow{
+    font-family:var(--font-mono);
+    font-size:13px;
+    color:var(--muted);
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    margin-bottom:24px;
+    display:flex;align-items:center;gap:10px;
+  }
+  .eyebrow::before{
+    content:"";
+    width:8px;height:8px;border-radius:50%;
+    background:var(--gold);
+    box-shadow:0 0 0 4px rgba(244,198,61,0.15);
+  }
+  h1{
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:clamp(40px, 7vw, 92px);
+    line-height:1.02;
+    letter-spacing:-0.02em;
+    max-width:16ch;
+  }
+  h1 .rotate-wrap{
+    color:var(--blue);
+    display:inline-block;
+    position:relative;
+  }
+  .hero-sub{
+    margin-top:28px;
+    font-size:clamp(16px, 2vw, 19px);
+    color:var(--muted);
+    max-width:52ch;
+    line-height:1.6;
+  }
+  .hero-sub strong{color:var(--text);font-weight:600;}
+  .hero-actions{
+    margin-top:40px;
+    display:flex;
+    gap:16px;
+    flex-wrap:wrap;
+  }
+  .btn-primary{
+    font-family:var(--font-mono);
+    font-size:14px;
+    background:var(--blue);
+    color:var(--ink);
+    padding:14px 26px;
+    border-radius:2px;
+    font-weight:500;
+    transition:transform .2s, box-shadow .2s;
+  }
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(91,141,255,0.35);}
+  .btn-ghost{
+    font-family:var(--font-mono);
+    font-size:14px;
+    padding:14px 26px;
+    border-radius:2px;
+    border:1px solid var(--line);
+    color:var(--text);
+    transition:border-color .2s;
+  }
+  .btn-ghost:hover{border-color:var(--muted);}
+
+  .scroll-cue{
+    position:absolute;bottom:36px;left:32px;
+    font-family:var(--font-mono);
+    font-size:11px;
+    color:var(--muted);
+    display:flex;align-items:center;gap:10px;
+  }
+  .scroll-cue::after{
+    content:"";width:1px;height:34px;
+    background:linear-gradient(var(--muted), transparent);
+  }
+
+  /* ---------- TICKER (signature element) ---------- */
+  .ticker-band{
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+    background:var(--panel);
+    overflow:hidden;
+    padding:22px 0;
+  }
+  .ticker-track{
+    display:flex;
+    width:max-content;
+    animation:scrollTicker 32s linear infinite;
+  }
+  .ticker-item{
+    font-family:var(--font-mono);
+    font-size:15px;
+    white-space:nowrap;
+    padding:0 40px;
+    display:flex;align-items:center;gap:10px;
+    color:var(--text);
+  }
+  .ticker-item .num{color:var(--gold);font-weight:500;}
+  .ticker-item .divider{color:var(--line);}
+  @keyframes scrollTicker{
+    from{transform:translateX(0);}
+    to{transform:translateX(-50%);}
+  }
+
+  /* ---------- SECTION SHARED ---------- */
+  section{padding:120px 0;}
+  .section-head{margin-bottom:64px;}
+  .section-num{
+    font-family:var(--font-mono);
+    font-size:13px;
+    color:var(--gold);
+    margin-bottom:12px;
+    letter-spacing:0.05em;
+  }
+  h2{
+    font-family:var(--font-display);
+    font-weight:600;
+    font-size:clamp(28px, 4vw, 44px);
+    letter-spacing:-0.01em;
+  }
+  .section-lede{
+    color:var(--muted);
+    font-size:17px;
+    max-width:60ch;
+    margin-top:18px;
+    line-height:1.7;
+  }
+
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease;}
+  .reveal.in{opacity:1;transform:translateY(0);}
+
+  /* ---------- ABOUT ---------- */
+  .about-grid{
+    display:grid;
+    grid-template-columns:1.2fr 1fr;
+    gap:64px;
+    align-items:start;
+  }
+  .about-copy p{
+    color:#C7CAD4;
+    font-size:16.5px;
+    line-height:1.85;
+    margin-bottom:20px;
+  }
+  .about-copy strong{color:var(--text);}
+  .fact-card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:6px;
+    padding:26px;
+    margin-bottom:16px;
+  }
+  .fact-card .label{
+    font-family:var(--font-mono);
+    font-size:12px;
+    color:var(--muted);
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    margin-bottom:8px;
+  }
+  .fact-card .value{font-family:var(--font-display);font-size:18px;font-weight:600;}
+  @media (max-width:860px){ .about-grid{grid-template-columns:1fr;} }
+
+  /* ---------- PERSONALITY ---------- */
+  .trait-grid{
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:20px;
+  }
+  .trait-card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:38px 34px;
+    position:relative;
+    overflow:hidden;
+    transition:transform .25s ease, border-color .25s ease;
+  }
+  .trait-card:hover{
+    transform:translateY(-4px);
+    border-color:var(--blue);
+  }
+  .trait-card:nth-child(2n){background:var(--panel-2);}
+  .trait-tag{
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:clamp(30px, 3.2vw, 40px);
+    letter-spacing:-0.01em;
+    line-height:1.05;
+    color:var(--blue);
+    margin-bottom:16px;
+  }
+  .trait-card:nth-child(2) .trait-tag,
+  .trait-card:nth-child(4) .trait-tag{color:var(--gold);}
+  .trait-title{
+    font-family:var(--font-mono);
+    font-weight:400;
+    font-size:13px;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    color:var(--muted);
+    max-width:none;
+    margin-bottom:18px;
+  }
+  .trait-desc{
+    color:#C7CAD4;
+    font-size:15px;
+    line-height:1.75;
+    max-width:38ch;
+  }
+  @media (max-width:760px){
+    .trait-grid{grid-template-columns:1fr;}
+  }
+
+  /* ---------- EXPERIENCE TIMELINE ---------- */
+  .timeline{border-left:1px solid var(--line);margin-left:6px;}
+  .tl-item{
+    position:relative;
+    padding:0 0 56px 40px;
+  }
+  .tl-item:last-child{padding-bottom:0;}
+  .tl-item::before{
+    content:"";
+    position:absolute;left:-6.5px;top:4px;
+    width:12px;height:12px;border-radius:50%;
+    background:var(--ink);
+    border:2px solid var(--blue);
+  }
+  .tl-date{
+    font-family:var(--font-mono);
+    font-size:12.5px;
+    color:var(--gold);
+    margin-bottom:8px;
+  }
+  .tl-role{
+    font-family:var(--font-display);
+    font-size:22px;
+    font-weight:600;
+    margin-bottom:4px;
+  }
+  .tl-org{color:var(--muted);font-size:15px;margin-bottom:16px;}
+  .tl-points{list-style:none;}
+  .tl-points li{
+    position:relative;
+    padding-left:18px;
+    color:#C7CAD4;
+    font-size:15px;
+    line-height:1.7;
+    margin-bottom:8px;
+  }
+  .tl-points li::before{
+    content:"—";
+    position:absolute;left:0;color:var(--muted);
+  }
+
+  /* ---------- SKILLS ---------- */
+  .skills-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+    border-radius:6px;
+    overflow:hidden;
+  }
+  .skill-block{
+    background:var(--panel);
+    padding:30px 26px;
+  }
+  .skill-block .cat{
+    font-family:var(--font-mono);
+    font-size:12px;
+    color:var(--blue);
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    margin-bottom:14px;
+  }
+  .skill-block .tools{
+    font-family:var(--font-body);
+    font-size:15px;
+    color:var(--text);
+    line-height:1.9;
+  }
+
+  /* ---------- FOUNDER STORY ---------- */
+  .founder{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:56px;
+    display:grid;
+    grid-template-columns:1fr auto;
+    gap:40px;
+    align-items:center;
+  }
+  .founder h3{
+    font-family:var(--font-display);
+    font-size:26px;
+    margin-bottom:14px;
+  }
+  .founder p{color:#C7CAD4;line-height:1.8;font-size:15.5px;max-width:56ch;}
+  .founder-stat{text-align:right;}
+  .founder-stat .big{
+    font-family:var(--font-display);
+    font-size:48px;
+    font-weight:700;
+    color:var(--gold);
+    line-height:1;
+  }
+  .founder-stat .small{
+    font-family:var(--font-mono);
+    font-size:12px;
+    color:var(--muted);
+    margin-top:8px;
+  }
+  @media (max-width:760px){
+    .founder{grid-template-columns:1fr;padding:36px;}
+    .founder-stat{text-align:left;}
+  }
+
+  /* ---------- CONTACT ---------- */
+  .contact-band{
+    background:var(--panel-2);
+    border-top:1px solid var(--line);
+  }
+  .contact-inner{
+    text-align:center;
+    padding:0 0 20px;
+  }
+  .contact-inner h2{max-width:16ch;margin:0 auto;}
+  .contact-links{
+    margin-top:40px;
+    display:flex;
+    justify-content:center;
+    gap:20px;
+    flex-wrap:wrap;
+  }
+  .contact-link{
+    font-family:var(--font-mono);
+    font-size:14px;
+    padding:14px 24px;
+    border:1px solid var(--line);
+    border-radius:2px;
+    transition:all .2s;
+  }
+  .contact-link:hover{border-color:var(--blue);color:var(--blue);}
+
+  footer{
+    text-align:center;
+    padding:32px 0 48px;
+    font-family:var(--font-mono);
+    font-size:12px;
+    color:var(--muted);
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="brand">AARYAMAN<span>.</span>AHLUWALIA</div>
+    <div class="nav-links">
+      <a href="#about">About</a>
+      <a href="#personality">Personality</a>
+      <a href="#experience">Experience</a>
+      <a href="#skills">Toolkit</a>
+      <a href="#founder">Founder Story</a>
+    </div>
+    <a class="nav-cta" href="#contact">Contact</a>
+  </div>
+</nav>
+
+<header>
+  <div class="wrap">
+    <div class="eyebrow">New Delhi, India — Honours Arts &amp; Business / Economics, Co-op, Finance Specialization, Class of 2026</div>
+    <h1>I turn numbers into <span class="rotate-wrap" id="rotator">decisions</span>.</h1>
+    <p class="hero-sub">
+      I'm <strong>Aaryaman Ahluwalia</strong> — I've spent the last few years moving between
+      analytics and marketing seats, usually both at once. Give me a messy dataset and a business
+      question, and I'll find the story in it, then build the thing that acts on it.
+    </p>
+    <div class="hero-actions">
+      <a class="btn-primary" href="#experience">See the work →</a>
+      <a class="btn-ghost" href="#contact">Get in touch</a>
+    </div>
+  </div>
+  <div class="scroll-cue">SCROLL</div>
+</header>
+
+<div class="ticker-band">
+  <div class="ticker-track" id="tickerTrack"></div>
+</div>
+
+<section id="about">
+  <div class="wrap reveal">
+    <div class="section-head">
+      <div class="section-num">01 — About</div>
+      <h2>Comfortable on either side of the dashboard.</h2>
+    </div>
+    <div class="about-grid">
+      <div class="about-copy">
+        <p>
+          I got here by accident, a little bit. At 19 I started a food business out of pure
+          curiosity about whether people would pay for what I was making — they did, and it
+          taught me more about pricing, demand, and operations than any course could.
+        </p>
+        <p>
+          Since then I've worked the finance side (KPI dashboards, variance analysis, forecasting)
+          and the growth side (attribution modeling, funnel analysis, campaign ROI) — often on the
+          same team, sometimes in the same week. <strong>That range is on purpose: I'd rather stay
+          useful across both than specialize too early into just one.</strong>
+        </p>
+        <p>
+          I graduated from Waterloo, I'm now based in New Delhi, and I'm actively figuring out
+          what's next. Wherever that lands, the habit stays the same — find the signal in the
+          noise, then actually do something about it.
+        </p>
+      </div>
+      <div class="about-facts">
+        <div class="fact-card">
+          <div class="label">Based in</div>
+          <div class="value">New Delhi, India</div>
+        </div>
+        <div class="fact-card">
+          <div class="label">Degree</div>
+          <div class="value">Honours Arts &amp; Business + Economics (Co-op), Finance Specialization</div>
+        </div>
+        <div class="fact-card">
+          <div class="label">Graduated</div>
+          <div class="value">University of Waterloo, 2026</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="personality">
+  <div class="wrap reveal">
+    <div class="section-head">
+      <div class="section-num">02 — Off The Dashboard</div>
+      <h2>The spreadsheets don't tell you this part.</h2>
+      <p class="section-lede">Four things that are true about me, regardless of the job title.</p>
+    </div>
+    <div class="trait-grid">
+
+      <div class="trait-card">
+        <div class="trait-tag">Creative</div>
+        <div class="trait-title">Naturally, not by training</div>
+        <div class="trait-desc">
+          I don't wait for a brief to tell me what's possible. Whether it was building a food
+          brand from nothing or finding a new angle in a campaign, I default to making something,
+          not just analyzing what already exists.
+        </div>
+      </div>
+
+      <div class="trait-card">
+        <div class="trait-tag">Organized</div>
+        <div class="trait-title">Systems over stress</div>
+        <div class="trait-desc">
+          I'd rather build the dashboard once than re-explain the answer five times. I keep
+          things structured enough that nothing depends on me remembering it — a habit that
+          started with juggling a startup and a full course load at once.
+        </div>
+      </div>
+
+      <div class="trait-card">
+        <div class="trait-tag">Adaptive</div>
+        <div class="trait-title">Comfortable being new at things</div>
+        <div class="trait-desc">
+          Four jobs, four very different industries — automotive, hospitality, legal-tech, and my
+          own startup. I've learned to get useful fast in unfamiliar rooms, and I actually enjoy
+          the part where I don't know the answer yet.
+        </div>
+      </div>
+
+      <div class="trait-card">
+        <div class="trait-tag">People-first</div>
+        <div class="trait-title">I'd rather be in the room</div>
+        <div class="trait-desc">
+          The data's the excuse to have a better conversation, not a replacement for one. I like
+          working cross-functionally, leading small teams, and being the person people actually
+          want to loop in.
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="experience">
+  <div class="wrap reveal">
+    <div class="section-head">
+      <div class="section-num">03 — Experience</div>
+      <h2>Where I've made an impact.</h2>
+    </div>
+    <div class="timeline">
+
+      <div class="tl-item">
+        <div class="tl-date">JAN 2025 — AUG 2025</div>
+        <div class="tl-role">Growth Marketing Analyst</div>
+        <div class="tl-org">Clio</div>
+        <ul class="tl-points">
+          <li>Analyzed multi-channel campaign performance across paid social, email, and webinars, improving ROI by 7% through attribution-informed budget allocation.</li>
+          <li>Ran MQL quality and lifecycle analysis in Salesforce and Marketo to identify funnel drop-offs and strengthen pipeline integrity.</li>
+          <li>Automated Looker reporting workflows and led AI adoption initiatives, lifting team execution efficiency by 5%.</li>
+          <li>Designed and launched a new high-intent MQL category tied to a multi-product GTM strategy.</li>
+        </ul>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-date">SEP 2023 — APR 2024</div>
+        <div class="tl-role">Business &amp; Marketing Analyst</div>
+        <div class="tl-org">Litens Automotive Partnership</div>
+        <ul class="tl-points">
+          <li>Built monthly KPI dashboards for leadership reporting and performance tracking.</li>
+          <li>Conducted competitive pricing and EV market analysis to support capital allocation decisions.</li>
+          <li>Led SEO and content updates that grew organic social engagement by 12%.</li>
+          <li>Partnered cross-functionally during a global website relaunch to modernize reporting structure.</li>
+        </ul>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-date">JAN 2021 — AUG 2021</div>
+        <div class="tl-role">Operations Finance &amp; Marketing Analyst</div>
+        <div class="tl-org">The Corner House</div>
+        <ul class="tl-points">
+          <li>Grew quarterly revenue 15% through sales performance analysis and pricing strategy.</li>
+          <li>Built Power BI dashboards to track revenue, cost trends, and efficiency ratios.</li>
+          <li>Ran root-cause analysis on performance fluctuations and presented data-backed recommendations.</li>
+        </ul>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-date">MAR 2020 — AUG 2020</div>
+        <div class="tl-role">Founder &amp; Operator</div>
+        <div class="tl-org">Chi &amp; Chow</div>
+        <ul class="tl-points">
+          <li>Founded and scaled a Pan-Asian food startup to $8K revenue and $5K profit in four months.</li>
+          <li>Owned pricing, cost tracking, demand forecasting, and supplier coordination.</li>
+          <li>Attracted franchise interest from multiple cities on the strength of unit economics.</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="wrap reveal">
+    <div class="section-head">
+      <div class="section-num">04 — Toolkit</div>
+      <h2>What I work with.</h2>
+    </div>
+    <div class="skills-grid">
+      <div class="skill-block">
+        <div class="cat">Analytics &amp; Modeling</div>
+        <div class="tools">Advanced Excel (VBA, Macros)<br>SQL (T-SQL, SSRS, SSAS)<br>Statistical &amp; econometric modeling</div>
+      </div>
+      <div class="skill-block">
+        <div class="cat">BI &amp; Reporting</div>
+        <div class="tools">Power BI (DAX, Data Modeling)<br>Looker<br>Google Analytics</div>
+      </div>
+      <div class="skill-block">
+        <div class="cat">Growth &amp; Marketing Ops</div>
+        <div class="tools">Salesforce · Marketo<br>Attribution &amp; funnel analysis<br>Campaign QA, GTM support</div>
+      </div>
+      <div class="skill-block">
+        <div class="cat">Emerging Workflows</div>
+        <div class="tools">AI-enabled reporting<br>Claude · ChatGPT · Kimi<br>Gemini Enterprise · Lovable</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="founder">
+  <div class="wrap reveal">
+    <div class="section-head">
+      <div class="section-num">05 — Where It Started</div>
+      <h2>Chi &amp; Chow</h2>
+    </div>
+    <div class="founder">
+      <div>
+        <h3>The startup that taught me the rest.</h3>
+        <p>
+          At 19, I founded a Pan-Asian food business from scratch — sourcing, pricing, marketing,
+          and running the numbers myself. Four months in, it was profitable and getting franchise
+          interest from other cities. It's a small line on a resume, but it's the reason
+          everything since has been about the same question: does this actually work, and how do
+          I know?
+        </p>
+      </div>
+      <div class="founder-stat">
+        <div class="big">$5K</div>
+        <div class="small">PROFIT IN 4 MONTHS</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="contact-band">
+  <section id="contact">
+    <div class="wrap contact-inner reveal">
+      <div class="section-num" style="text-align:center;">06 — Contact</div>
+      <h2>Let's talk about what's next.</h2>
+      <p class="section-lede" style="margin-left:auto;margin-right:auto;text-align:center;">
+        Open to analyst, growth, and marketing-ops roles — and genuinely happy to talk through
+        any of the three.
+      </p>
+      <div class="contact-links">
+        <a class="contact-link" href="mailto:a22ahluw@uwaterloo.ca">a22ahluw@uwaterloo.ca</a>
+        <a class="contact-link" href="https://www.linkedin.com/in/aaryaman-" target="_blank" rel="noopener">LinkedIn ↗</a>
+      </div>
+    </div>
+  </section>
+</div>
+
+<footer>© 2026 Aaryaman Ahluwalia — Built with data, shipped with a little bit of chaos.</footer>
+
+<script>
+  // Word rotator
+  const words = ["decisions", "growth", "pipelines", "campaigns", "clarity"];
+  let wi = 0;
+  const rotEl = document.getElementById('rotator');
+  setInterval(() => {
+    wi = (wi + 1) % words.length;
+    rotEl.style.opacity = 0;
+    setTimeout(() => {
+      rotEl.textContent = words[wi];
+      rotEl.style.opacity = 1;
+    }, 300);
+  }, 2400);
+  rotEl.style.transition = 'opacity .3s ease';
+
+  // Ticker content (duplicated for seamless loop)
+  const stats = [
+    { n: "+7%", label: "campaign ROI at Clio" },
+    { n: "+5%", label: "team execution efficiency" },
+    { n: "+15%", label: "quarterly revenue at The Corner House" },
+    { n: "+12%", label: "organic engagement at Litens" },
+    { n: "$8K", label: "revenue built from zero — Chi & Chow" },
+  ];
+  const track = document.getElementById('tickerTrack');
+  function buildTicker(){
+    let html = '';
+    for(let rep=0; rep<2; rep++){
+      stats.forEach(s => {
+        html += `<div class="ticker-item"><span class="num">${s.n}</span><span>${s.label}</span><span class="divider">/</span></div>`;
+      });
+    }
+    track.innerHTML = html;
+  }
+  buildTicker();
+
+  // Scroll reveal
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('in'); });
+  }, { threshold: 0.15 });
+  revealEls.forEach(el => io.observe(el));
+</script>
+
+</body>
+</html>
