@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Chi &amp; Chow — Aaryaman Ahluwalia</title>
+<meta name="description" content="A Pan-Asian delivery brand co-founded at 19 — branding, a priced menu, unit economics, and $8K revenue on $5K profit in four months out of a home kitchen.">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Chi &amp; Chow — Aaryaman Ahluwalia">
+<meta property="og:description" content="A Pan-Asian delivery brand co-founded at 19. $8K revenue, $5K profit, four months, one home kitchen.">
+
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230C0D12'/><text x='50' y='71' font-family='Georgia,serif' font-size='62' font-weight='700' fill='%235B8DFF' text-anchor='middle'>A</text></svg>">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:#0C0D12;
+    --panel:#15171F;
+    --panel-2:#1C1F29;
+    --line:#2A2E3A;
+    --line-faint:#20232D;
+    --text:#F3F3EE;
+    --muted:#9096A5;
+    --faint:#6B7183;
+    --blue:#5B8DFF;
+    --gold:#F4C63D;
+    --green:#6FCF97;
+    --font-display:'Space Grotesk', sans-serif;
+    --font-body:'Inter', sans-serif;
+    --font-mono:'IBM Plex Mono', monospace;
+  }
+  * { box-sizing: border-box; margin:0; padding:0; }
+  body { background: var(--ink); color: var(--text); font-family: var(--font-body); }
+  ::selection{background:var(--blue);color:var(--ink);}
+  a { color: inherit; text-decoration: none; }
+  .mono { font-family: var(--font-mono); }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 32px 32px 64px; }
+  @media (max-width:640px){ .wrap { padding: 24px 20px 48px; } }
+
+  .back-link {
+    display:inline-flex; align-items:center; gap:8px;
+    font-family: var(--font-mono); font-size: 13px; color: var(--muted);
+    margin-bottom: 36px; transition: color .2s;
+  }
+  .back-link:hover { color: var(--blue); }
+
+  .hero { border-bottom: 1px solid var(--line); padding-bottom: 32px; margin-bottom: 36px; }
+  .hero-row { display:flex; align-items:center; gap:30px; flex-wrap:wrap; }
+  .hero-logo {
+    width:104px; height:104px; object-fit:cover;
+    border-radius:18px; border:1px solid var(--line); flex-shrink:0;
+  }
+  .eyebrow {
+    font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--gold); margin-bottom: 14px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .eyebrow::before {
+    content:""; width:8px; height:8px; border-radius:50%;
+    background: var(--gold); box-shadow: 0 0 0 4px rgba(244,198,61,0.15);
+  }
+  h1 {
+    font-family: var(--font-display); font-weight: 700;
+    font-size: clamp(30px, 5vw, 46px); line-height: 1.05;
+    letter-spacing: -0.02em; margin-bottom: 16px;
+  }
+  .sub { font-size: 16px; color: var(--muted); max-width: 62ch; line-height: 1.75; }
+
+  .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 52px; }
+  @media (max-width: 760px) { .kpi-grid { grid-template-columns: repeat(2, 1fr); } }
+  .kpi-card { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 18px 20px; }
+  .kpi-label {
+    font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--faint); margin-bottom: 10px;
+  }
+  .kpi-value {
+    font-family: var(--font-display); font-size: 27px; color: var(--gold);
+    font-weight: 700; letter-spacing:-0.01em;
+  }
+
+  h2 {
+    font-family: var(--font-display); font-weight: 600; font-size: 24px;
+    letter-spacing:-0.01em; margin-bottom: 14px;
+  }
+  .block { margin-top: 52px; }
+  .block p { color:#C7CAD4; font-size:16px; line-height:1.85; margin-bottom:18px; max-width:72ch; }
+  .block p:last-child { margin-bottom:0; }
+
+  .split { display:grid; grid-template-columns: 1.25fr 1fr; gap:48px; align-items:start; }
+  @media (max-width:820px){ .split { grid-template-columns:1fr; gap:32px; } }
+  .media-card { background: var(--panel); border:1px solid var(--line); border-radius:14px; padding:14px; }
+  .media-card img { width:100%; border-radius:8px; display:block; }
+  .media-caption {
+    font-family:var(--font-mono); font-size:12px; color:var(--muted);
+    margin-top:14px; text-align:center; line-height:1.5;
+  }
+
+  .takeaways { list-style:none; margin-top:6px; }
+  .takeaways li {
+    position:relative; padding-left:26px; margin-bottom:16px;
+    color:#C7CAD4; font-size:16px; line-height:1.8; max-width:72ch;
+  }
+  .takeaways li::before {
+    content:""; position:absolute; left:0; top:11px;
+    width:8px; height:8px; border-radius:2px; background:var(--blue);
+  }
+  .takeaways b { color:var(--text); font-weight:600; }
+
+  .tag-row { display:flex; gap:10px; flex-wrap:wrap; margin-top:26px; }
+  .tag-chip {
+    font-family:var(--font-mono); font-size:12px; color:var(--blue);
+    border:1px solid var(--line); padding:7px 14px; border-radius:20px;
+  }
+
+  .footer-note {
+    margin-top: 56px; padding-top: 20px; border-top: 1px solid var(--line);
+    font-family: var(--font-mono); font-size: 11.5px; color: var(--faint); line-height: 1.7;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <a class="back-link" href="../index.html">← Aaryaman Ahluwalia</a>
+
+  <div class="hero">
+    <div class="hero-row">
+      <img class="hero-logo" src="../assets/chi-chow-logo.jpg" alt="Chi and Chow logo" width="104" height="104">
+      <div>
+        <div class="eyebrow">Chi &amp; Chow &middot; 2020</div>
+        <h1>A home kitchen that<br>turned a profit.</h1>
+      </div>
+    </div>
+    <p class="sub" style="margin-top:24px;">A Pan-Asian takeaway-and-delivery brand I co-founded with my friend Anirudh at 19 — full branding, a real priced menu, and every order taken over WhatsApp and Instagram. Four months in it was profitable and drawing franchise interest from other cities.</p>
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-label">Revenue</div>
+      <div class="kpi-value">$8K</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Profit</div>
+      <div class="kpi-value">$5K</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Runtime</div>
+      <div class="kpi-value">4 mo</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Co-founded</div>
+      <div class="kpi-value">50/50</div>
+    </div>
+  </div>
+
+  <div class="split">
+    <div>
+      <h2>What it was</h2>
+      <p>
+        Chi &amp; Chow started from a simple question: would people actually pay for the food I was
+        making? We built the whole thing ourselves — the name, the branding, the menu and its
+        prices — and ran it out of a home kitchen with no staff and no storefront.
+      </p>
+      <p>
+        We split everything 50/50: sourcing, cooking, pricing, marketing, and the delivery
+        logistics behind all of it. Orders came in through Instagram and WhatsApp, which meant
+        every customer conversation, complaint and repeat order came straight to us.
+      </p>
+      <p>
+        It wound down when it was time to leave for university. By then it had been profitable
+        for months and we'd had franchise enquiries from other cities — not bad for something
+        that existed because we were curious.
+      </p>
+      <div class="tag-row">
+        <span class="tag-chip">Co-founder</span>
+        <span class="tag-chip">Pricing &amp; Ops</span>
+        <span class="tag-chip">Brand &amp; Menu Design</span>
+        <span class="tag-chip">@chi.n.chow</span>
+      </div>
+    </div>
+    <div class="media-card">
+      <img src="../assets/chi-chow-menu.jpg" alt="Chi and Chow delivery menu" loading="lazy">
+      <div class="media-caption">The actual delivery menu — priced, tested, and ordered off Instagram.</div>
+    </div>
+  </div>
+
+  <div class="block">
+    <h2>What I actually ran</h2>
+    <ul class="takeaways">
+      <li><b>Pricing and unit economics.</b> Every menu item was costed before it was priced. The margin on each dish decided whether it stayed on the menu.</li>
+      <li><b>Demand forecasting.</b> Ordering ingredients for a home kitchen with no cold storage meant guessing volume right. Guess high and it spoils; guess low and you turn away orders.</li>
+      <li><b>Supplier coordination.</b> Sourcing was weekly, manual, and price-sensitive — the closest thing to vendor management I'd done at that point.</li>
+      <li><b>Acquisition and brand.</b> I managed the campaign budget and a small social team to drive orders and build recognition in a market where nobody had heard of us.</li>
+    </ul>
+  </div>
+
+  <div class="block">
+    <h2>What it taught me</h2>
+    <p>
+      A good idea only matters if the unit economics work. We had dishes people loved that we
+      pulled because the margin didn't survive contact with real ingredient costs, and plainer
+      items that carried the business. That gap between what sounds good and what the numbers
+      support is the thing I've carried into every analytics and marketing role since.
+    </p>
+    <p>
+      It also taught me that being close to the customer is a data source. Running orders through
+      WhatsApp meant I could see which promos actually got used, which days ran hot, and why
+      someone ordered twice in a week — the kind of signal that gets flattened out once there's a
+      platform in between.
+    </p>
+  </div>
+
+  <div class="footer-note">Chi &amp; Chow operated from March to August 2020. Figures on this page are the real revenue and profit from that period.</div>
+</div>
+</body>
+</html>

@@ -4,6 +4,21 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Aaryaman Ahluwalia — Data → Story → Growth</title>
+<meta name="description" content="Aaryaman Ahluwalia — growth and marketing-ops analyst. Attribution, tracking, dashboards and AI-driven reporting automation. Waterloo 2026, based in Vancouver.">
+
+<!-- Link previews -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://aaryaman7.github.io/">
+<meta property="og:title" content="Aaryaman Ahluwalia — Data → Story → Growth">
+<meta property="og:description" content="Growth and marketing-ops analyst. Attribution, tracking, dashboards and AI-driven reporting automation.">
+<meta property="og:image" content="https://aaryaman7.github.io/assets/chi-chow-menu.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Aaryaman Ahluwalia — Data → Story → Growth">
+<meta name="twitter:description" content="Growth and marketing-ops analyst. Attribution, tracking, dashboards and AI-driven reporting automation.">
+<meta name="twitter:image" content="https://aaryaman7.github.io/assets/chi-chow-menu.jpg">
+
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230C0D12'/><text x='50' y='71' font-family='Georgia,serif' font-size='62' font-weight='700' fill='%235B8DFF' text-anchor='middle'>A</text></svg>">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -12,6 +27,8 @@
     --ink:#0C0D12;
     --panel:#15171F;
     --panel-2:#1C1F29;
+    --band:#11131A;
+    --line-soft:#1F222C;
     --line:#2A2E3A;
     --text:#F3F3EE;
     --muted:#9096A5;
@@ -51,12 +68,29 @@
     height:68px;
   }
   .brand{
+    display:flex;
+    align-items:center;
+    gap:11px;
     font-family:var(--font-mono);
     font-size:14px;
     letter-spacing:0.02em;
     color:var(--text);
   }
-  .brand span{color:var(--gold);}
+  .brand-mark{
+    width:26px;height:26px;
+    flex-shrink:0;
+    border-radius:7px;
+    background:var(--panel-2);
+    border:1px solid var(--line);
+    color:var(--blue);
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:15px;
+    line-height:1;
+    display:flex;align-items:center;justify-content:center;
+    transition:border-color .2s;
+  }
+  .brand:hover .brand-mark{border-color:var(--blue);}
   .nav-links{display:flex;gap:32px;font-size:14px;color:var(--muted);}
   .nav-links a{transition:color .2s;}
   .nav-links a:hover{color:var(--text);}
@@ -70,6 +104,17 @@
     transition:all .2s;
   }
   .nav-cta:hover{background:var(--blue);color:var(--ink);}
+  .nav-actions{display:flex;align-items:center;gap:12px;}
+  .nav-ghost{
+    font-family:var(--font-mono);
+    font-size:13px;
+    padding:9px 18px;
+    border:1px solid var(--line);
+    border-radius:2px;
+    color:var(--muted);
+    transition:all .2s;
+  }
+  .nav-ghost:hover{border-color:var(--muted);color:var(--text);}
   @media (max-width:760px){ .nav-links{display:none;} }
 
   /* ---------- HERO ---------- */
@@ -107,10 +152,23 @@
   h1{
     font-family:var(--font-display);
     font-weight:700;
-    font-size:clamp(40px, 7vw, 92px);
+    font-size:clamp(42px, 6.2vw, 84px);
     line-height:1.02;
     letter-spacing:-0.02em;
-    max-width:16ch;
+    max-width:14ch;
+  }
+  .hero-grid{
+    display:grid;
+    grid-template-columns:1.45fr 0.72fr;
+    gap:52px;
+    align-items:center;
+  }
+  .hero-facts{display:flex;flex-direction:column;gap:11px;}
+  .hero-facts .fact-card{padding:16px 18px;margin-bottom:0;border-radius:9px;}
+  .hero-facts .fact-card .label{font-size:10.5px;margin-bottom:6px;}
+  .hero-facts .fact-card .value{font-size:14.5px;line-height:1.45;}
+  @media (max-width:820px){
+    .hero-grid{grid-template-columns:1fr;gap:36px;align-items:start;}
   }
   h1 .rotate-wrap{
     color:var(--blue);
@@ -118,14 +176,13 @@
     position:relative;
   }
   .hero-sub{
-    margin-top:28px;
-    font-size:clamp(16px, 2vw, 19px);
+    margin-top:30px;
+    font-size:clamp(17px, 1.35vw, 21px);
     color:var(--muted);
-    max-width:52ch;
-    line-height:1.6;
+    max-width:48ch;
+    line-height:1.7;
   }
   .hero-sub strong{color:var(--text);font-weight:600;}
-
   .scroll-cue{
     position:absolute;bottom:36px;left:32px;
     font-family:var(--font-mono);
@@ -138,7 +195,7 @@
     background:linear-gradient(var(--muted), transparent);
   }
 
-  /* ---------- TICKER (signature element) ---------- */
+  /* ---------- TICKER ---------- */
   .ticker-band{
     border-top:1px solid var(--line);
     border-bottom:1px solid var(--line);
@@ -167,8 +224,19 @@
   }
 
   /* ---------- SECTION SHARED ---------- */
-  section{padding:84px 0;}
-  .section-head{margin-bottom:64px;}
+  section{padding:56px 0;}
+  /* Alternating bands: tinted sections carry their own card shade */
+  .band{
+    background:var(--band);
+    border-top:1px solid var(--line-soft);
+    border-bottom:1px solid var(--line-soft);
+  }
+  .band .fact-card,
+  .band .tool-card,
+  .band .work-card{background:var(--panel-2);}
+  .band .work-card:hover{background:#222534;}
+  .band:has(+ .contact-band){border-bottom:none;}
+  .section-head{margin-bottom:32px;}
   .section-num{
     font-family:var(--font-mono);
     font-size:13px;
@@ -190,14 +258,15 @@
     line-height:1.7;
   }
 
-  .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease;}
-  .reveal.in{opacity:1;transform:translateY(0);}
+  /* Reveal: visible by default, animated only when JS is available */
+  .js .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease;}
+  .js .reveal.in{opacity:1;transform:translateY(0);}
 
   /* ---------- ABOUT ---------- */
   .about-grid{
     display:grid;
-    grid-template-columns:1.2fr 1fr;
-    gap:64px;
+    grid-template-columns:1.4fr 0.8fr;
+    gap:56px;
     align-items:start;
   }
   .about-copy p{
@@ -207,6 +276,37 @@
     margin-bottom:20px;
   }
   .about-copy strong{color:var(--text);}
+  .about-traits{display:flex;flex-direction:column;gap:11px;}
+  .about-trait{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:15px 18px;
+    transition:border-color .2s, transform .2s;
+  }
+  .about-trait:hover{transform:translateY(-2px);}
+  .about-trait-word{
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:clamp(17px, 1.5vw, 20px);
+    letter-spacing:-0.015em;
+    line-height:1.15;
+    display:block;
+  }
+  .about-trait-note{
+    font-family:var(--font-mono);
+    font-size:10.5px;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin-top:6px;
+    display:block;
+  }
+  /* alternating accent, matching the tile style on the live site */
+  .about-trait:nth-child(odd)  .about-trait-word{color:var(--blue);}
+  .about-trait:nth-child(even) .about-trait-word{color:var(--gold);}
+  .about-trait:nth-child(odd):hover{border-color:var(--blue);}
+  .about-trait:nth-child(even):hover{border-color:var(--gold);}
   .fact-card{
     background:var(--panel);
     border:1px solid var(--line);
@@ -224,63 +324,17 @@
   }
   .fact-card .value{font-family:var(--font-display);font-size:18px;font-weight:600;}
   @media (max-width:860px){ .about-grid{grid-template-columns:1fr;} }
-
-  /* ---------- PERSONALITY ---------- */
-  .trait-grid{
-    display:grid;
-    grid-template-columns:repeat(2, 1fr);
-    gap:20px;
-  }
-  .trait-card{
-    background:var(--panel);
-    border:1px solid var(--line);
-    border-radius:10px;
-    padding:38px 34px;
-    position:relative;
-    overflow:hidden;
-    transition:transform .25s ease, border-color .25s ease;
-  }
-  .trait-card:hover{
-    transform:translateY(-4px);
-    border-color:var(--blue);
-  }
-  .trait-card:nth-child(2n){background:var(--panel-2);}
-  .trait-tag{
-    font-family:var(--font-display);
-    font-weight:700;
-    font-size:clamp(30px, 3.2vw, 40px);
-    letter-spacing:-0.01em;
-    line-height:1.05;
-    color:var(--blue);
-    margin-bottom:16px;
-  }
-  .trait-card:nth-child(2) .trait-tag,
-  .trait-card:nth-child(4) .trait-tag{color:var(--gold);}
-  .trait-title{
-    font-family:var(--font-mono);
-    font-weight:400;
-    font-size:13px;
-    text-transform:uppercase;
-    letter-spacing:0.06em;
-    color:var(--muted);
-    max-width:none;
-    margin-bottom:18px;
-  }
-  .trait-desc{
-    color:#C7CAD4;
-    font-size:15px;
-    line-height:1.75;
-    max-width:38ch;
-  }
   @media (max-width:760px){
-    .trait-grid{grid-template-columns:1fr;}
+    section{padding:44px 0;}
+    .section-head{margin-bottom:26px;}
+    .work-head{margin-bottom:30px;}
   }
 
   /* ---------- EXPERIENCE TIMELINE ---------- */
   .timeline{border-left:1px solid var(--line);margin-left:6px;}
   .tl-item{
     position:relative;
-    padding:0 0 56px 40px;
+    padding:0 0 40px 40px;
   }
   .tl-item:last-child{padding-bottom:0;}
   .tl-item::before{
@@ -317,159 +371,189 @@
     position:absolute;left:0;color:var(--muted);
   }
 
-  /* ---------- SKILLS ---------- */
-  .skills-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));
-    gap:1px;
-    background:var(--line);
-    border:1px solid var(--line);
-    border-radius:6px;
-    overflow:hidden;
-  }
-  .skill-block{
-    background:var(--panel);
-    padding:30px 26px;
-  }
-  .skill-block .cat{
-    font-family:var(--font-mono);
-    font-size:12px;
-    color:var(--blue);
-    text-transform:uppercase;
-    letter-spacing:0.06em;
-    margin-bottom:14px;
-  }
-  .skill-block .tools{
-    font-family:var(--font-body);
-    font-size:15px;
-    color:var(--text);
-    line-height:1.9;
-  }
-
-  /* ---------- PROJECTS ---------- */
-  .project-block{padding-bottom:64px;margin-bottom:64px;border-bottom:1px solid var(--line);}
-  .project-block:last-child{padding-bottom:0;margin-bottom:0;border-bottom:none;}
-  .project-name{
-    font-family:var(--font-display);
-    font-weight:700;
-    font-size:clamp(24px, 2.6vw, 32px);
-    letter-spacing:-0.01em;
-    margin-bottom:10px;
-  }
-  .project-tagline{
-    color:var(--muted);
-    font-size:15.5px;
-    max-width:60ch;
-    line-height:1.65;
-    margin-bottom:36px;
-  }
-  .project-top{
+  /* ---------- TOOLKIT ---------- */
+  .tool-group{margin-bottom:34px;}
+  .tool-group:last-child{margin-bottom:0;}
+  .tool-group-head{
     display:flex;
     align-items:center;
-    gap:44px;
-    flex-wrap:wrap;
-    margin-bottom:40px;
-    padding-bottom:32px;
-    border-bottom:1px solid var(--line);
+    gap:12px;
+    margin-bottom:20px;
   }
-  .project-logo{
-    width:130px;
-    height:130px;
-    object-fit:cover;
-    border-radius:14px;
-    border:1px solid var(--line);
+  .tool-dot{
+    width:10px;height:10px;border-radius:3px;
     flex-shrink:0;
   }
-  .project-stats{display:flex;gap:36px;flex-wrap:wrap;}
-  .pstat-num{
+  .tool-group-title{
     font-family:var(--font-display);
-    font-weight:700;
-    font-size:30px;
-    color:var(--gold);
-    line-height:1;
+    font-size:19px;
+    font-weight:600;
+    letter-spacing:-0.01em;
   }
-  .pstat-label{
-    font-family:var(--font-mono);
-    font-size:11px;
-    color:var(--muted);
-    text-transform:uppercase;
-    letter-spacing:0.05em;
-    margin-top:8px;
-  }
-  .project-body{
+  .tool-grid{
     display:grid;
-    grid-template-columns:1.3fr 1fr;
-    gap:56px;
-    align-items:start;
+    grid-template-columns:repeat(auto-fill, minmax(216px, 1fr));
+    gap:12px;
   }
-  .project-copy p{color:#C7CAD4;font-size:16px;line-height:1.85;margin-bottom:20px;}
-  .project-copy .tag-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px;}
-  .tag-chip{
-    font-family:var(--font-mono);
-    font-size:12px;
-    color:var(--blue);
-    border:1px solid var(--line);
-    padding:7px 14px;
-    border-radius:20px;
-  }
-  .project-media{
+  .tool-card{
+    display:flex;
+    align-items:center;
+    gap:14px;
     background:var(--panel);
     border:1px solid var(--line);
-    border-radius:12px;
-    padding:14px;
+    border-radius:10px;
+    padding:14px 16px;
+    transition:border-color .2s, transform .2s;
   }
-  .project-media img{width:100%;border-radius:6px;display:block;}
-  .media-caption{
+  .tool-card:hover{border-color:var(--blue);transform:translateY(-2px);}
+  .tool-mark{
+    width:38px;height:38px;
+    border-radius:9px;
+    flex-shrink:0;
+    background:rgba(243,243,238,0.06);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .tool-mark img{
+    width:22px;height:22px;
+    object-fit:contain;
+    display:block;
+  }
+  .tool-mono{
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:13px;
+    letter-spacing:-0.02em;
+    color:var(--muted);
+  }
+  .tool-name{
+    font-size:14.5px;
+    font-weight:600;
+    color:var(--text);
+    line-height:1.3;
+  }
+  .tool-use{
+    font-family:var(--font-mono);
+    font-size:11.5px;
+    color:var(--muted);
+    margin-top:3px;
+    line-height:1.35;
+  }
+
+  /* ---------- MY WORK ---------- */
+  .work-head{margin-bottom:32px;}
+  .work-title-row{display:flex;align-items:center;gap:28px;}
+  .work-title-row h2{
+    font-size:clamp(38px, 6vw, 64px);
+    font-weight:700;
+    letter-spacing:-0.03em;
+    white-space:nowrap;
+  }
+  .work-rule{
+    flex:1;height:2px;border-radius:2px;
+    background:linear-gradient(90deg, var(--blue), #A95CF1 55%, #E86FC4);
+  }
+  .work-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(380px, 1fr));
+    gap:24px;
+  }
+  @media (max-width:820px){ .work-grid{grid-template-columns:1fr;} }
+  .work-card{
+    display:flex;flex-direction:column;
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:30px 32px 26px;
+    transition:border-color .22s, transform .22s, background .22s;
+  }
+  .work-card:hover{
+    border-color:#5B5FE0;
+    background:var(--panel-2);
+    transform:translateY(-3px);
+  }
+  .work-pill{
+    align-self:flex-start;
     font-family:var(--font-mono);
     font-size:12px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:#A6A6F7;
+    background:rgba(91,95,224,0.18);
+    border-radius:20px;
+    padding:9px 18px;
+    margin-bottom:26px;
+  }
+  .work-name{
+    font-family:var(--font-display);
+    font-size:clamp(22px, 2.6vw, 29px);
+    font-weight:700;
+    letter-spacing:-0.02em;
+    line-height:1.15;
+    margin-bottom:18px;
+  }
+  .work-desc{
     color:var(--muted);
-    margin-top:14px;
-    text-align:center;
+    font-size:16px;
+    line-height:1.75;
+    margin-bottom:30px;
   }
-  .cta-media{
+  .work-stats{
     display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    text-align:center;
-    padding:40px 28px;
+    gap:48px;
+    flex-wrap:wrap;
+    margin-top:auto;
+    margin-bottom:28px;
   }
-  .cta-visual{
-    width:100%;
-    height:90px;
-    margin-bottom:24px;
+  .work-stat-num{
+    font-family:var(--font-display);
+    font-size:30px;
+    font-weight:700;
+    color:var(--gold);
+    line-height:1;
+    margin-bottom:10px;
   }
-  .cta-visual svg{width:100%;height:100%;}
-  .project-cta-btn{
+  .work-stat-label{
     font-family:var(--font-mono);
-    font-size:14px;
-    background:var(--blue);
-    color:var(--ink);
-    padding:13px 24px;
-    border-radius:2px;
-    font-weight:500;
-    display:inline-block;
-    transition:transform .2s, box-shadow .2s;
+    font-size:11px;
+    letter-spacing:0.07em;
+    text-transform:uppercase;
+    color:var(--muted);
   }
-  .project-cta-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(91,141,255,0.35);}
-  @media (max-width:860px){
-    .project-body{grid-template-columns:1fr;}
-    .project-top{flex-direction:column;align-items:flex-start;}
+  .work-foot{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+    flex-wrap:wrap;
+    padding-top:22px;
+    border-top:1px solid var(--line);
   }
+  .work-tools{
+    font-family:var(--font-mono);
+    font-size:12.5px;
+    color:var(--muted);
+  }
+  .work-open{
+    font-family:var(--font-mono);
+    font-size:13px;
+    color:#8A8CF0;
+    white-space:nowrap;
+    transition:color .2s;
+  }
+  .work-card:hover .work-open{color:var(--blue);}
 
   /* ---------- CONTACT ---------- */
   .contact-band{
     background:var(--panel-2);
     border-top:1px solid var(--line);
   }
-  .contact-band section{padding:120px 0;}
   .contact-inner{
     text-align:center;
     padding:0 0 20px;
   }
   .contact-inner h2{max-width:16ch;margin:0 auto;}
   .contact-links{
-    margin-top:40px;
+    margin-top:32px;
     display:flex;
     justify-content:center;
     gap:20px;
@@ -487,7 +571,7 @@
 
   footer{
     text-align:center;
-    padding:32px 0 48px;
+    padding:26px 0 36px;
     font-family:var(--font-mono);
     font-size:12px;
     color:var(--muted);
@@ -498,27 +582,48 @@
 
 <nav>
   <div class="wrap">
-    <div class="brand">AARYAMAN<span>.</span>AHLUWALIA</div>
+    <a class="brand" href="#top">
+      <span class="brand-mark" aria-hidden="true">A</span>
+      <span>AARYAMAN AHLUWALIA</span>
+    </a>
     <div class="nav-links">
       <a href="#about">About</a>
-      <a href="#personality">Personality</a>
       <a href="#experience">Experience</a>
       <a href="#skills">Toolkit</a>
       <a href="#projects">Projects</a>
     </div>
-    <a class="nav-cta" href="#contact">Contact</a>
+    <div class="nav-actions">
+      <a class="nav-ghost" href="assets/aaryaman-ahluwalia-resume.pdf" target="_blank" rel="noopener">Resume</a>
+      <a class="nav-cta" href="#contact">Contact</a>
+    </div>
   </div>
 </nav>
 
-<header>
-  <div class="wrap">
-    <div class="eyebrow">New Delhi, India — Honours Arts &amp; Business / Economics, Co-op, Finance Specialization, Class of 2026</div>
-    <h1>I turn numbers into <span class="rotate-wrap" id="rotator">decisions</span>.</h1>
-    <p class="hero-sub">
-      I'm <strong>Aaryaman Ahluwalia</strong> — I've spent the last few years moving between
-      analytics and marketing seats, usually both at once. Give me a messy dataset and a business
-      question, and I'll find the story in it, then build the thing that acts on it.
-    </p>
+<header id="top">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <div class="eyebrow">University of Waterloo</div>
+      <h1>I turn numbers into <span class="rotate-wrap" id="rotator">decisions</span>.</h1>
+      <p class="hero-sub">
+        I'm <strong>Aaryaman Ahluwalia</strong> — I've spent the last few years moving between
+        analytics and marketing roles, usually both at once. Give me a messy dataset and a business
+        question, and I'll find the story, and build the thing that acts on it.
+      </p>
+    </div>
+    <div class="hero-facts">
+      <div class="fact-card">
+        <div class="label">Degree</div>
+        <div class="value">Honours Arts and Business + Honours Economics (Co-op), Finance Specialization</div>
+      </div>
+      <div class="fact-card">
+        <div class="label">Industries</div>
+        <div class="value">Legal Tech | Automotive | Hospitality | Food</div>
+      </div>
+      <div class="fact-card">
+        <div class="label">Based in</div>
+        <div class="value">Vancouver, BC</div>
+      </div>
+    </div>
   </div>
   <div class="scroll-cue">SCROLL</div>
 </header>
@@ -536,97 +641,48 @@
     <div class="about-grid">
       <div class="about-copy">
         <p>
-          I got here by accident, a little bit. At 19 I started a food business out of pure
-          curiosity about whether people would pay for what I was making — they did, and it
-          taught me more about pricing, demand, and operations than any course could.
+          At 19, I started a food business out of pure curiosity about whether people would pay
+          for what I was making — they did, and it taught me more about pricing, demand, and
+          operations than any course could.
         </p>
         <p>
-          Since then I've worked the finance side (KPI dashboards, variance analysis, forecasting)
-          and the growth side (attribution modeling, funnel analysis, campaign ROI) — often on the
-          same team, sometimes in the same week. <strong>That range is on purpose: I'd rather stay
-          useful across both than specialize too early into just one.</strong>
+          Since then I've worked the finance side, building KPI dashboards and running variance
+          analysis and forecasting, and the growth side, modeling attribution, analyzing funnels
+          and tracking campaign ROI — often on the same team, sometimes in the same week. That
+          range is on purpose: I'd rather stay useful across both than specialize too early into
+          just one.
         </p>
         <p>
-          I graduated from Waterloo, I'm now based in New Delhi, and I'm actively figuring out
-          what's next. Wherever that lands, the habit stays the same — find the signal in the
-          noise, then actually do something about it.
+          I graduated from Waterloo and I'm actively figuring out what's next. Wherever that lands,
+          the habit stays the same — find the signal in the noise, then actually do something about it.
         </p>
       </div>
-      <div class="about-facts">
-        <div class="fact-card">
-          <div class="label">Based in</div>
-          <div class="value">New Delhi, India</div>
+      <div class="about-traits">
+        <div class="about-trait">
+          <span class="about-trait-word">Creative</span>
+          <span class="about-trait-note">Naturally, not by training</span>
         </div>
-        <div class="fact-card">
-          <div class="label">Degree</div>
-          <div class="value">Honours Arts &amp; Business + Economics (Co-op), Finance Specialization</div>
+        <div class="about-trait">
+          <span class="about-trait-word">Organized</span>
+          <span class="about-trait-note">Systems over stress</span>
         </div>
-        <div class="fact-card">
-          <div class="label">Graduated</div>
-          <div class="value">University of Waterloo, 2026</div>
+        <div class="about-trait">
+          <span class="about-trait-word">Adaptive</span>
+          <span class="about-trait-note">Comfortable being new at things</span>
+        </div>
+        <div class="about-trait">
+          <span class="about-trait-word">Cross-functional</span>
+          <span class="about-trait-note">I'd rather be in the room</span>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<section id="personality">
+<section id="experience" class="band">
   <div class="wrap reveal">
     <div class="section-head">
-      <div class="section-num">02 — Off The Dashboard</div>
-      <h2>The spreadsheets don't tell you this part.</h2>
-      <p class="section-lede">Four things that are true about me, regardless of the job title.</p>
-    </div>
-    <div class="trait-grid">
-
-      <div class="trait-card">
-        <div class="trait-tag">Creative</div>
-        <div class="trait-title">Naturally, not by training</div>
-        <div class="trait-desc">
-          I don't wait for a brief to tell me what's possible. Whether it was building a food
-          brand from nothing or finding a new angle in a campaign, I default to making something,
-          not just analyzing what already exists.
-        </div>
-      </div>
-
-      <div class="trait-card">
-        <div class="trait-tag">Organized</div>
-        <div class="trait-title">Systems over stress</div>
-        <div class="trait-desc">
-          I'd rather build the dashboard once than re-explain the answer five times. I keep
-          things structured enough that nothing depends on me remembering it — a habit that
-          started with juggling a startup and a full course load at once.
-        </div>
-      </div>
-
-      <div class="trait-card">
-        <div class="trait-tag">Adaptive</div>
-        <div class="trait-title">Comfortable being new at things</div>
-        <div class="trait-desc">
-          Four jobs, four very different industries — automotive, hospitality, legal-tech, and my
-          own startup. I've learned to get useful fast in unfamiliar rooms, and I actually enjoy
-          the part where I don't know the answer yet.
-        </div>
-      </div>
-
-      <div class="trait-card">
-        <div class="trait-tag">People-first</div>
-        <div class="trait-title">I'd rather be in the room</div>
-        <div class="trait-desc">
-          The data's the excuse to have a better conversation, not a replacement for one. I like
-          working cross-functionally, leading small teams, and being the person people actually
-          want to loop in.
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<section id="experience">
-  <div class="wrap reveal">
-    <div class="section-head">
-      <div class="section-num">03 — Experience</div>
+      <div class="section-num">02 — Experience</div>
       <h2>Where I've made an impact.</h2>
     </div>
     <div class="timeline">
@@ -636,9 +692,11 @@
         <div class="tl-role">Growth Marketing Analyst</div>
         <div class="tl-org">Clio</div>
         <ul class="tl-points">
-          <li>Analyzed multi-channel campaign performance across paid social, email, and webinars, improving ROI by 7% through attribution-informed budget allocation.</li>
-          <li>Ran MQL quality and lifecycle analysis in Salesforce and Marketo to identify funnel drop-offs and strengthen pipeline integrity.</li>
-          <li>Automated Looker reporting workflows and led AI adoption initiatives, lifting team execution efficiency by 5%.</li>
+          <li>Automated weekly team reporting with Gemini and Looker, cutting reporting time 25%; process adopted by marketing ops for other teams.</li>
+          <li>Built Looker dashboards consolidating MQL and AQL reporting by channel, campaign, region, and firm size, replacing multiple separate reports.</li>
+          <li>Caught and fixed attribution gaps through weekly MQL spot-checks, including a landing page credited with roughly half its actual conversions.</li>
+          <li>Built a UTM naming convention for 100+ US affiliate partners, standardizing tracking across the program.</li>
+          <li>Reallocated paid social budget from Facebook to LinkedIn using W-shaped attribution analysis, increasing pipeline per dollar spent by 7% quarter over quarter.</li>
           <li>Designed and launched a new high-intent MQL category tied to a multi-product GTM strategy.</li>
         </ul>
       </div>
@@ -650,17 +708,17 @@
         <ul class="tl-points">
           <li>Built monthly KPI dashboards for leadership reporting and performance tracking.</li>
           <li>Conducted competitive pricing and EV market analysis to support capital allocation decisions.</li>
-          <li>Led SEO and content updates that grew organic social engagement by 12%.</li>
+          <li>Led SEO and content updates across the website and social, growing LinkedIn engagement rate 12% month over month and followers 20% over six months.</li>
           <li>Partnered cross-functionally during a global website relaunch to modernize reporting structure.</li>
         </ul>
       </div>
 
       <div class="tl-item">
         <div class="tl-date">JAN 2021 — AUG 2021</div>
-        <div class="tl-role">Operations Finance &amp; Marketing Analyst</div>
+        <div class="tl-role">Marketing Analyst</div>
         <div class="tl-org">The Corner House</div>
         <ul class="tl-points">
-          <li>Grew quarterly revenue 15% through sales performance analysis and pricing strategy.</li>
+          <li>Grew quarterly revenue 15% through pricing changes, promotions, and digital campaign optimization.</li>
           <li>Built Power BI dashboards to track revenue, cost trends, and efficiency ratios.</li>
           <li>Ran root-cause analysis on performance fluctuations and presented data-backed recommendations.</li>
         </ul>
@@ -671,7 +729,7 @@
         <div class="tl-role">Founder &amp; Operator</div>
         <div class="tl-org">Chi &amp; Chow</div>
         <ul class="tl-points">
-          <li>Founded and scaled a Pan-Asian food startup to $8K revenue and $5K profit in four months.</li>
+          <li>Co-founded and scaled a Pan-Asian food startup to $8K revenue and $5K profit in four months.</li>
           <li>Owned pricing, cost tracking, demand forecasting, and supplier coordination.</li>
           <li>Attracted franchise interest from multiple cities on the strength of unit economics.</li>
         </ul>
@@ -684,163 +742,159 @@
 <section id="skills">
   <div class="wrap reveal">
     <div class="section-head">
-      <div class="section-num">04 — Toolkit</div>
+      <div class="section-num">03 — Toolkit</div>
       <h2>What I work with.</h2>
     </div>
-    <div class="skills-grid">
-      <div class="skill-block">
-        <div class="cat">Analytics &amp; Modeling</div>
-        <div class="tools">Advanced Excel (VBA, Macros)<br>SQL (T-SQL, SSRS, SSAS)<br>Statistical &amp; econometric modeling</div>
+
+    <div class="tool-group">
+      <div class="tool-group-head">
+        <span class="tool-dot" style="background:#5B8DFF"></span>
+        <span class="tool-group-title">Marketing ops &amp; CRM</span>
       </div>
-      <div class="skill-block">
-        <div class="cat">BI &amp; Reporting</div>
-        <div class="tools">Power BI (DAX, Data Modeling)<br>Looker<br>Google Analytics</div>
-      </div>
-      <div class="skill-block">
-        <div class="cat">Growth &amp; Marketing Ops</div>
-        <div class="tools">Salesforce · Marketo<br>Attribution &amp; funnel analysis<br>Campaign QA, GTM support</div>
-      </div>
-      <div class="skill-block">
-        <div class="cat">Emerging Workflows</div>
-        <div class="tools">AI-enabled reporting<br>Claude · ChatGPT · Kimi<br>Gemini Enterprise · Lovable</div>
+      <div class="tool-grid">
+        <div class="tool-card"><div class="tool-mark"><img src="assets/logos/salesforce.svg" alt="" width="24" height="24" loading="lazy"></div><div><div class="tool-name">Salesforce</div><div class="tool-use">CRM &amp; pipeline data</div></div></div>
+        <div class="tool-card"><div class="tool-mark"><img src="assets/logos/marketo.svg" alt="" width="24" height="24" loading="lazy"></div><div><div class="tool-name">Marketo</div><div class="tool-use">MQL lifecycle</div></div></div>
+        <div class="tool-card"><div class="tool-mark"><img src="assets/logos/hubspot.svg" alt="" width="24" height="24" loading="lazy"></div><div><div class="tool-name">HubSpot</div><div class="tool-use">Campaign workflows</div></div></div>
+        <div class="tool-card"><div class="tool-mark"><img src="assets/logos/zapier.svg" alt="" width="24" height="24" loading="lazy"></div><div><div class="tool-name">Zapier</div><div class="tool-use">Workflow automation</div></div></div>
+        <div class="tool-card"><div class="tool-mark"><img src="assets/logos/asana.svg" alt="" width="24" height="24" loading="lazy"></div><div><div class="tool-name">Asana</div><div class="tool-use">Project tracking</div></div></div>
+        <div class="tool-card"><div class="tool-mark"><img src="assets/logos/notion.svg" alt="" width="24" height="24" loading="lazy"></div><div><div class="tool-name">Notion</div><div class="tool-use">Docs &amp; planning</div></div></div>
+        <div class="tool-card"><div class="tool-mark"><img src="assets/logos/sharepoint.svg" alt="" width="24" height="24" loading="lazy"></div><div><div class="tool-name">SharePoint</div><div class="tool-use">Trackers &amp; flows</div></div></div>
       </div>
     </div>
+
+    <div class="tool-group">
+      <div class="tool-group-head">
+        <span class="tool-dot" style="background:#F4C63D"></span>
+        <span class="tool-group-title">Paid media &amp; SEO</span>
+      </div>
+      <div class="tool-grid">
+        <div class="tool-card"><div class="tool-mark"><img src="assets/logos/google-ads.svg" alt="" width="24" height="24" loading="lazy"></div><div><div class="tool-name">Google Ads</div><div class="tool-use">Search &amp; display</div></div></div>
+        <div class="tool-card"><div class="tool-mark"><img src="assets/logos/meta.svg" alt="" width="24" height="24" loading="lazy"></div><div><div class="tool-name">Meta Ads Manager</div><div class="tool-use">Paid social</div></div></div>
+        <div class="tool-card"><div class="tool-mark"><img src="assets/logos/semrush.svg" alt="" width="24" height="24" loading="lazy"></div><div><div class="tool-name">SEMrush</div><div class="tool-use">Keyword research</div></div></div>
+        <div class="tool-card"><div class="tool-mark tool-mono" style="background:rgba(5,112,255,.15);color:#4D93FF">Ah</div><div><div class="tool-name">Ahrefs</div><div class="tool-use">Backlinks &amp; audits</div></div></div>
+      </div>
+    </div>
+
+    <div class="tool-group">
+      <div class="tool-group-head">
+        <span class="tool-dot" style="background:#BA6247"></span>
+        <span class="tool-group-title">Analytics &amp; BI</span>
+      </div>
+      <div class="tool-grid">
+        <div class="tool-card"><div class="tool-mark"><img src="assets/logos/looker.svg" alt="" width="24" height="24" loading="lazy"></div><div><div class="tool-name">Looker</div><div class="tool-use">Dashboards</div></div></div>
+        <div class="tool-card"><div class="tool-mark"><img src="assets/logos/power-bi.svg" alt="" width="24" height="24" loading="lazy"></div><div><div class="tool-name">Power BI</div><div class="tool-use">DAX &amp; modelling</div></div></div>
+        <div class="tool-card"><div class="tool-mark"><img src="assets/logos/tableau.svg" alt="" width="24" height="24" loading="lazy"></div><div><div class="tool-name">Tableau</div><div class="tool-use">Visual analysis</div></div></div>
+        <div class="tool-card"><div class="tool-mark"><img src="assets/logos/google-analytics.svg" alt="" width="24" height="24" loading="lazy"></div><div><div class="tool-name">Google Analytics 4</div><div class="tool-use">Traffic &amp; attribution</div></div></div>
+        <div class="tool-card"><div class="tool-mark"><img src="assets/logos/excel.svg" alt="" width="24" height="24" loading="lazy"></div><div><div class="tool-name">Advanced Excel</div><div class="tool-use">VBA &amp; macros</div></div></div>
+        <div class="tool-card"><div class="tool-mark"><img src="assets/logos/sql.svg" alt="" width="24" height="24" loading="lazy"></div><div><div class="tool-name">SQL</div><div class="tool-use">Querying &amp; analysis</div></div></div>
+        <div class="tool-card"><div class="tool-mark"><img src="assets/logos/r.svg" alt="" width="24" height="24" loading="lazy"></div><div><div class="tool-name">R</div><div class="tool-use">Statistical analysis</div></div></div>
+      </div>
+    </div>
+
+    <div class="tool-group">
+      <div class="tool-group-head">
+        <span class="tool-dot" style="background:#8FAE86"></span>
+        <span class="tool-group-title">AI workflows</span>
+      </div>
+      <div class="tool-grid">
+        <div class="tool-card"><div class="tool-mark"><img src="assets/logos/claude.svg" alt="" width="24" height="24" loading="lazy"></div><div><div class="tool-name">Claude</div><div class="tool-use">Analysis &amp; drafting</div></div></div>
+        <div class="tool-card"><div class="tool-mark"><img src="assets/logos/gemini.svg" alt="" width="24" height="24" loading="lazy"></div><div><div class="tool-name">Gemini Enterprise</div><div class="tool-use">Automated reporting</div></div></div>
+        <div class="tool-card"><div class="tool-mark"><img src="assets/logos/lovable.svg" alt="" width="24" height="24" loading="lazy"></div><div><div class="tool-name">Lovable</div><div class="tool-use">Rapid prototyping</div></div></div>
+        <div class="tool-card"><div class="tool-mark"><img src="assets/logos/chatgpt.svg" alt="" width="24" height="24" loading="lazy"></div><div><div class="tool-name">ChatGPT</div><div class="tool-use">Everyday workflows</div></div></div>
+        <div class="tool-card"><div class="tool-mark"><img src="assets/logos/kimi.svg" alt="" width="24" height="24" loading="lazy"></div><div><div class="tool-name">Kimi</div><div class="tool-use">Long-document work</div></div></div>
+      </div>
+    </div>
+
+    <div class="tool-group">
+      <div class="tool-group-head">
+        <span class="tool-dot" style="background:#A795FF"></span>
+        <span class="tool-group-title">Design &amp; content</span>
+      </div>
+      <div class="tool-grid">
+        <div class="tool-card"><div class="tool-mark"><img src="assets/logos/figma.svg" alt="" width="24" height="24" loading="lazy"></div><div><div class="tool-name">Figma</div><div class="tool-use">Layouts &amp; decks</div></div></div>
+        <div class="tool-card"><div class="tool-mark"><img src="assets/logos/canva.svg" alt="" width="24" height="24" loading="lazy"></div><div><div class="tool-name">Canva</div><div class="tool-use">Campaign creative</div></div></div>
+        <div class="tool-card"><div class="tool-mark tool-mono" style="background:rgba(243,243,238,.10);color:#D8DAE3">Cc</div><div><div class="tool-name">CapCut</div><div class="tool-use">Short-form video</div></div></div>
+      </div>
+    </div>
+
   </div>
 </section>
 
-<section id="projects">
+<section id="projects" class="band">
   <div class="wrap reveal">
-    <div class="section-head">
-      <div class="section-num">05 — Projects</div>
-      <h2>Skills, applied.</h2>
-      <p class="section-lede">Two things built to show the work, not just describe it.</p>
+    <div class="work-head">
+      <div class="section-num">04 — Projects</div>
+      <div class="work-title-row">
+        <h2>My Work</h2>
+        <span class="work-rule"></span>
+      </div>
+      <p class="section-lede">Two pieces of work, rebuilt as pages you can open and click through
+      rather than screenshots. The Corner House dashboard runs on a synthetic dataset; Chi &amp; Chow's
+      figures are real.</p>
     </div>
 
-    <div class="project-block">
-      <div class="project-name">Chi &amp; Chow</div>
-      <p class="project-tagline">A real Pan-Asian delivery brand I co-founded and ran for a semester — not a class project, an actual business with real customers.</p>
+    <div class="work-grid">
 
-      <div class="project-top">
-        <img class="project-logo" src="projects/assets/chi-chow-logo.jpg" alt="Chi & Chow logo">
-        <div class="project-stats">
+      <a class="work-card" href="projects/chi-and-chow.html">
+        <span class="work-pill">Chi &amp; Chow &middot; Food startup</span>
+        <h3 class="work-name">A Home Kitchen That Turned a Profit</h3>
+        <p class="work-desc">A Pan-Asian delivery brand I co-founded at 19 and ran for four months —
+        branding, a real priced menu, pricing and unit economics, and every order taken over
+        WhatsApp and Instagram.</p>
+        <div class="work-stats">
           <div>
-            <div class="pstat-num">$8K</div>
-            <div class="pstat-label">Revenue</div>
+            <div class="work-stat-num">$8K</div>
+            <div class="work-stat-label">Revenue in four months</div>
           </div>
           <div>
-            <div class="pstat-num">$5K</div>
-            <div class="pstat-label">Profit</div>
-          </div>
-          <div>
-            <div class="pstat-num">4 mo</div>
-            <div class="pstat-label">Runtime</div>
-          </div>
-          <div>
-            <div class="pstat-num">50/50</div>
-            <div class="pstat-label">Co-founded</div>
+            <div class="work-stat-num">$5K</div>
+            <div class="work-stat-label">Profit, home kitchen</div>
           </div>
         </div>
-      </div>
+        <div class="work-foot">
+          <span class="work-tools">Pricing &middot; Ops &middot; Brand design</span>
+          <span class="work-open">Open &rarr;</span>
+        </div>
+      </a>
 
-      <div class="project-body">
-        <div class="project-copy">
-          <p>
-            Chi &amp; Chow was a Pan-Asian takeaway-and-delivery brand I built with my friend
-            Anirudh in 2020 — full branding, a real priced menu, and orders taken over WhatsApp
-            and Instagram. We split everything 50/50: sourcing, cooking, pricing, marketing, and
-            the delivery logistics behind all of it.
-          </p>
-          <p>
-            Four months in, it was profitable and getting franchise interest from other cities —
-            not bad for something we ran out of a home kitchen. It wound down when it was time to
-            leave for university, but it's where I first learned that a good idea only matters if
-            the unit economics actually work.
-          </p>
-          <div class="tag-row">
-            <span class="tag-chip">Co-founder</span>
-            <span class="tag-chip">Pricing &amp; Ops</span>
-            <span class="tag-chip">Brand &amp; Menu Design</span>
-            <span class="tag-chip">@chi.n.chow</span>
+      <a class="work-card" href="projects/villa-ledger-dashboard.html">
+        <span class="work-pill">The Corner House &middot; KPI dashboard</span>
+        <h3 class="work-name">Villa Performance Ledger</h3>
+        <p class="work-desc">Occupancy, rate and channel data for a homestay villa. Click any marked
+        month and it breaks the swing into occupancy, pricing and channel-mix effects — the way an
+        operator diagnoses a number, not just reports it.</p>
+        <div class="work-stats">
+          <div>
+            <div class="work-stat-num">19 mo</div>
+            <div class="work-stat-label">Of tracked data</div>
+          </div>
+          <div>
+            <div class="work-stat-num">5</div>
+            <div class="work-stat-label">Root-cause markers</div>
           </div>
         </div>
-        <div class="project-media">
-          <img src="projects/assets/chi-chow-menu.jpg" alt="Chi & Chow delivery menu">
-          <div class="media-caption">The actual delivery menu — priced, tested, and ordered off Instagram.</div>
+        <div class="work-foot">
+          <span class="work-tools">Chart.js &middot; Variance decomposition &middot; KPI design</span>
+          <span class="work-open">Open &rarr;</span>
         </div>
-      </div>
+      </a>
+
     </div>
-
-    <div class="project-block">
-      <div class="project-name">Villa Performance Ledger</div>
-      <p class="project-tagline">An interactive KPI dashboard inspired by the operations and root-cause work at The Corner House.</p>
-
-      <div class="project-top">
-        <div class="project-stats">
-          <div>
-            <div class="pstat-num">19 mo</div>
-            <div class="pstat-label">Of tracked data</div>
-          </div>
-          <div>
-            <div class="pstat-num">5</div>
-            <div class="pstat-label">Root-cause markers</div>
-          </div>
-          <div>
-            <div class="pstat-num">3</div>
-            <div class="pstat-label">Charts, live</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="project-body">
-        <div class="project-copy">
-          <p>
-            Built to demonstrate the same KPI tracking and root-cause thinking behind the work at
-            The Corner House, on a synthetic 19-month dataset for a homestay villa. Click any
-            marked month on the RevPAR trend and it opens a live variance decomposition —
-            occupancy, pricing, and channel-mix effects broken out the way an operator would
-            actually diagnose a swing, not just report it.
-          </p>
-          <p>
-            Three of the marked months are dips worth investigating, two are gains worth
-            understanding — including one that closes the loop on the very first anomaly a year
-            later.
-          </p>
-          <div class="tag-row">
-            <span class="tag-chip">Chart.js</span>
-            <span class="tag-chip">Variance Decomposition</span>
-            <span class="tag-chip">KPI Design</span>
-          </div>
-        </div>
-        <div class="project-media cta-media">
-          <div class="cta-visual">
-            <svg viewBox="0 0 240 90" xmlns="http://www.w3.org/2000/svg">
-              <polyline points="0,60 30,52 55,68 80,40 105,46 130,20 155,30 180,15 205,26 240,10" fill="none" stroke="#F4C63D" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-              <circle cx="80" cy="40" r="4" fill="#BA6247"/>
-              <circle cx="130" cy="20" r="4" fill="#8FAE86"/>
-              <circle cx="180" cy="15" r="4" fill="#8FAE86"/>
-            </svg>
-          </div>
-          <a class="project-cta-btn" href="projects/villa-ledger-dashboard.html" target="_blank" rel="noopener">View live dashboard →</a>
-          <div class="media-caption">Click into any marked month to see the live breakdown.</div>
-        </div>
-      </div>
-    </div>
-
   </div>
 </section>
 
 <div class="contact-band">
   <section id="contact">
     <div class="wrap contact-inner reveal">
-      <div class="section-num" style="text-align:center;">06 — Contact</div>
+      <div class="section-num" style="text-align:center;">05 — Contact</div>
       <h2>Let's talk about what's next.</h2>
       <p class="section-lede" style="margin-left:auto;margin-right:auto;text-align:center;">
-        Open to analyst, growth, and marketing-ops roles — and genuinely happy to talk through
-        any of the three.
+        Looking for growth and marketing-ops roles — and happy to talk through analyst work too.
       </p>
       <div class="contact-links">
-        <a class="contact-link" href="mailto:a22ahluw@uwaterloo.ca">a22ahluw@uwaterloo.ca</a>
-        <a class="contact-link" href="https://www.linkedin.com/in/aaryaman-" target="_blank" rel="noopener">LinkedIn ↗</a>
+        <a class="contact-link" href="mailto:a22ahluw@uwaterloo.ca">Contact</a>
+        <a class="contact-link" href="https://www.linkedin.com/in/aaryaman-" target="_blank" rel="noopener">LinkedIn</a>
+        <a class="contact-link" href="assets/aaryaman-ahluwalia-resume.pdf" target="_blank" rel="noopener">Resume</a>
       </div>
     </div>
   </section>
@@ -849,26 +903,32 @@
 <footer>© 2026 Aaryaman Ahluwalia — Built with data, shipped with a little bit of chaos.</footer>
 
 <script>
+  document.documentElement.classList.add('js');
+
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
   // Word rotator
   const words = ["decisions", "growth", "pipelines", "campaigns", "clarity"];
   let wi = 0;
   const rotEl = document.getElementById('rotator');
-  setInterval(() => {
-    wi = (wi + 1) % words.length;
-    rotEl.style.opacity = 0;
-    setTimeout(() => {
-      rotEl.textContent = words[wi];
-      rotEl.style.opacity = 1;
-    }, 300);
-  }, 2400);
-  rotEl.style.transition = 'opacity .3s ease';
+  if (rotEl && !reduceMotion) {
+    rotEl.style.transition = 'opacity .3s ease';
+    setInterval(() => {
+      wi = (wi + 1) % words.length;
+      rotEl.style.opacity = 0;
+      setTimeout(() => {
+        rotEl.textContent = words[wi];
+        rotEl.style.opacity = 1;
+      }, 300);
+    }, 2400);
+  }
 
   // Ticker content (duplicated for seamless loop)
   const stats = [
-    { n: "+7%", label: "campaign ROI at Clio" },
-    { n: "+5%", label: "team execution efficiency" },
+    { n: "+7%", label: "pipeline per dollar at Clio" },
+    { n: "25%", label: "faster reporting at Clio" },
     { n: "+15%", label: "quarterly revenue at The Corner House" },
-    { n: "+12%", label: "organic engagement at Litens" },
+    { n: "+12%", label: "LinkedIn engagement at Litens" },
     { n: "$8K", label: "revenue built from zero — Chi & Chow" },
   ];
   const track = document.getElementById('tickerTrack');
@@ -882,13 +942,18 @@
     track.innerHTML = html;
   }
   buildTicker();
+  if (reduceMotion) track.style.animation = 'none';
 
   // Scroll reveal
   const revealEls = document.querySelectorAll('.reveal');
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('in'); });
-  }, { threshold: 0.15 });
-  revealEls.forEach(el => io.observe(el));
+  if (reduceMotion || !('IntersectionObserver' in window)) {
+    revealEls.forEach(el => el.classList.add('in'));
+  } else {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('in'); });
+    }, { threshold: 0.15 });
+    revealEls.forEach(el => io.observe(el));
+  }
 </script>
 
 </body>

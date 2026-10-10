@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Villa Performance Ledger — Aaryaman Ahluwalia</title>
+<meta name="description" content="An interactive KPI dashboard with live variance decomposition — occupancy, pricing and channel-mix effects broken out month by month. Synthetic dataset.">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Villa Performance Ledger — Aaryaman Ahluwalia">
+<meta property="og:description" content="Interactive KPI dashboard with live variance decomposition. Click any marked month to see what actually drove the swing.">
+
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230C0D12'/><text x='50' y='71' font-family='Georgia,serif' font-size='62' font-weight='700' fill='%235B8DFF' text-anchor='middle'>A</text></svg>">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:#0C0D12;
+    --panel:#15171F;
+    --panel-2:#1C1F29;
+    --line:#2A2E3A;
+    --line-faint:#20232D;
+    --text:#F3F3EE;
+    --muted:#9096A5;
+    --faint:#6B7183;
+    --blue:#5B8DFF;
+    --gold:#F4C63D;
+    --green:#6FCF97;
+    --red:#E0735F;
+    --teal:#56BFC4;
+    --font-display:'Space Grotesk', sans-serif;
+    --font-body:'Inter', sans-serif;
+    --font-mono:'IBM Plex Mono', monospace;
+  }
+  * { box-sizing: border-box; margin:0; padding:0; }
+  body { background: var(--ink); color: var(--text); font-family: var(--font-body); }
+  ::selection{background:var(--blue);color:var(--ink);}
+  a { color: inherit; text-decoration: none; }
+  .mono { font-family: var(--font-mono); }
+  .display { font-family: var(--font-display); }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 32px 32px 64px; }
+  @media (max-width:640px){ .wrap { padding: 24px 20px 48px; } }
+
+  .back-link {
+    display:inline-flex; align-items:center; gap:8px;
+    font-family: var(--font-mono); font-size: 13px; color: var(--muted);
+    margin-bottom: 36px; transition: color .2s;
+  }
+  .back-link:hover { color: var(--blue); }
+
+  .hero { border-bottom: 1px solid var(--line); padding-bottom: 28px; margin-bottom: 32px; }
+  .eyebrow {
+    font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--gold); margin-bottom: 14px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .eyebrow::before {
+    content:""; width:8px; height:8px; border-radius:50%;
+    background: var(--gold); box-shadow: 0 0 0 4px rgba(244,198,61,0.15);
+  }
+  h1 {
+    font-family: var(--font-display); font-weight: 700;
+    font-size: clamp(30px, 5vw, 46px); line-height: 1.05;
+    letter-spacing: -0.02em; margin-bottom: 16px;
+  }
+  .sub { font-size: 16px; color: var(--muted); max-width: 60ch; line-height: 1.7; }
+
+  .kpi-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 44px; }
+  @media (max-width: 760px) {
+    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    .decomp-grid { grid-template-columns: 1fr !important; }
+  }
+  .kpi-card { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 16px 18px; min-width: 0; }
+  .kpi-label {
+    font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--faint); margin-bottom: 10px;
+  }
+  .kpi-value {
+    font-family: var(--font-display); font-size: 23px; color: var(--text);
+    font-weight: 600; letter-spacing:-0.01em; margin-bottom: 7px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .kpi-delta { font-family: var(--font-mono); font-size: 12px; display: inline-flex; align-items: center; gap: 4px; }
+  .up { color: var(--green); } .down { color: var(--red); } .flat { color: var(--faint); }
+
+  h2 { font-family: var(--font-display); font-weight: 600; font-size: 22px; letter-spacing:-0.01em; color: var(--text); margin-bottom: 8px; }
+  .section-note { font-size: 14px; color: var(--muted); margin-bottom: 14px; line-height:1.6; max-width: 70ch; }
+  .legend-row { display: flex; gap: 18px; flex-wrap:wrap; margin-bottom: 14px; }
+  .legend-item { display: inline-flex; align-items: center; gap: 7px; font-family: var(--font-mono); font-size: 12px; color: var(--muted); }
+  .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+  .chart-card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 18px 12px 10px; }
+  .chart-wrap { position: relative; width: 100%; }
+  .placeholder {
+    border: 1px dashed var(--line); border-radius: 8px; padding: 16px 20px; margin-top: 16px;
+    font-family: var(--font-mono); font-size: 12.5px; color: var(--faint);
+  }
+  .panel {
+    display: none; background: var(--panel-2); border: 1px solid var(--line); border-radius: 8px;
+    padding: 20px 22px; margin-top: 16px; animation: unfold 0.25s ease-out;
+  }
+  @keyframes unfold { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
+  .panel-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; gap:16px; }
+  .panel-eyebrow { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
+  .panel-title { font-family: var(--font-display); font-weight: 600; font-size: 20px; letter-spacing:-0.01em; color: var(--text); }
+  .panel-sub { font-size: 13.5px; color: var(--muted); margin-top: 3px; }
+  .panel-note { font-size: 14.5px; color: #C7CAD4; line-height: 1.75; margin-bottom: 22px; max-width: 68ch; }
+  .close-btn { background: none; border: none; color: var(--faint); cursor: pointer; padding: 4px; font-size: 18px; line-height: 1; transition: color .2s; }
+  .close-btn:hover { color: var(--text); }
+  .decomp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+  .decomp-label { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--faint); margin-bottom: 14px; }
+  .ledger-bar-row { margin-bottom: 15px; }
+  .ledger-bar-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; font-size: 13.5px; }
+  .ledger-bar-label { color: var(--muted); }
+  .ledger-track { height: 6px; background: var(--line-faint); border-radius: 3px; position: relative; overflow: hidden; }
+  .ledger-fill { position: absolute; top: 0; bottom: 0; }
+  .ledger-mid { position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: var(--line); }
+  .total-row { border-top: 1px solid var(--line); margin-top: 12px; padding-top: 12px; display: flex; justify-content: space-between; font-size: 13.5px; }
+  .compare-row { display: flex; justify-content: space-between; font-size: 13.5px; padding: 8px 0; border-bottom: 1px solid var(--line-faint); }
+  .compare-label { color: var(--muted); }
+  .compare-val { color: var(--faint); display: flex; align-items: center; gap: 6px; }
+  .compare-val b { color: var(--text); font-weight: 500; }
+  .custom-legend { display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 10px; }
+  .block { margin-top: 52px; }
+  .footer-note {
+    margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--line);
+    font-family: var(--font-mono); font-size: 11.5px; color: var(--faint); line-height: 1.7;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <a class="back-link" href="../index.html">← Aaryaman Ahluwalia</a>
+
+  <div class="hero">
+    <div class="eyebrow">Villa Performance Ledger</div>
+    <h1>Not just what moved.<br>Why it moved.</h1>
+    <p class="sub">Occupancy, rate, and channel data for a homestay villa, read the way a hands-on operator reads it, then taken apart to show what actually drove each swing. Built as a demonstration piece; figures below are synthetic.</p>
+  </div>
+
+  <div class="kpi-grid" id="kpiGrid"></div>
+
+  <div>
+    <h2>Net RevPAR, gross vs. after commission</h2>
+    <p class="section-note">Gross assumes no commission drag. The marked months, some dips, some gains, are where it's worth asking why. Click one.</p>
+    <div class="legend-row">
+      <span class="legend-item"><span class="dot" style="background:var(--red)"></span>Dip worth investigating</span>
+      <span class="legend-item"><span class="dot" style="background:var(--green)"></span>Gain worth understanding</span>
+    </div>
+  </div>
+  <div class="chart-card">
+    <div class="chart-wrap" style="height:280px;">
+      <canvas id="revparChart" role="img" aria-label="Net and gross RevPAR by month, with marked dips and gains"></canvas>
+    </div>
+  </div>
+
+  <div class="panel" id="panel">
+    <div class="panel-head">
+      <div>
+        <div class="panel-eyebrow" id="panelEyebrow"></div>
+        <h3 class="panel-title" id="panelTitle"></h3>
+        <div class="panel-sub" id="panelSub"></div>
+      </div>
+      <button class="close-btn" id="closePanel" aria-label="Close note">&times;</button>
+    </div>
+    <p class="panel-note" id="panelNote"></p>
+    <div class="decomp-grid">
+      <div>
+        <div class="decomp-label">Net RevPAR change vs. baseline</div>
+        <div id="ledgerBars"></div>
+        <div class="total-row"><span style="color:var(--text)">Total change</span><span id="totalChange" class="mono"></span></div>
+      </div>
+      <div>
+        <div class="decomp-label">Baseline vs. this month</div>
+        <div id="compareRows"></div>
+      </div>
+    </div>
+  </div>
+  <div class="placeholder" id="placeholder">Click a marked point on the line above to open the investigation for that month.</div>
+
+  <div class="block">
+    <h2>Booking channel mix</h2>
+    <p class="section-note">Direct bookings carry no commission. Every point of share lost to Airbnb or Booking.com costs 15-18% of that night's rate.</p>
+  </div>
+  <div class="custom-legend" id="channelLegend"></div>
+  <div class="chart-card">
+    <div class="chart-wrap" style="height:220px;">
+      <canvas id="channelChart" role="img" aria-label="Booking channel mix share by month across direct, Airbnb, Booking.com and corporate channels"></canvas>
+    </div>
+  </div>
+
+  <div class="block">
+    <h2>Housekeeping and maintenance cost per occupied night</h2>
+    <p class="section-note">Cost per night climbs through the monsoon months alongside cancellations, weather damage and rebooking cleaning both add up.</p>
+  </div>
+  <div class="chart-card">
+    <div class="chart-wrap" style="height:200px;">
+      <canvas id="costChart" role="img" aria-label="Housekeeping and maintenance cost per occupied night by month"></canvas>
+    </div>
+  </div>
+
+  <div class="footer-note">Synthetic dataset built to demonstrate KPI tracking and root-cause decomposition informed by hospitality operations experience. Not real business figures.</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const T = {
+  blue:'#5B8DFF', gold:'#F4C63D', green:'#6FCF97', red:'#E0735F', teal:'#56BFC4',
+  ink:'#F3F3EE', inkDim:'#9096A5', inkFaint:'#6B7183', bg:'#0C0D12',
+  rule:'#2A2E3A', ruleFaint:'#20232D', panel:'#1C1F29'
+};
+
+Chart.defaults.font.family = "'IBM Plex Mono', monospace";
+
+const RAW = [
+  { m:'Jan 2024', occupancy:82, adr:9200,  mix:{direct:42,airbnb:28,booking:20,corporate:10}, hk:1420, cancel:7,  los:3.1 },
+  { m:'Feb 2024', occupancy:78, adr:9000,  mix:{direct:40,airbnb:29,booking:21,corporate:10}, hk:1400, cancel:8,  los:2.9 },
+  { m:'Mar 2024', occupancy:54, adr:8900,  mix:{direct:38,airbnb:30,booking:22,corporate:10}, hk:1550, cancel:22, los:2.2 },
+  { m:'Apr 2024', occupancy:70, adr:8600,  mix:{direct:40,airbnb:29,booking:21,corporate:10}, hk:1480, cancel:9,  los:2.6 },
+  { m:'May 2024', occupancy:65, adr:8300,  mix:{direct:39,airbnb:30,booking:21,corporate:10}, hk:1500, cancel:10, los:2.5 },
+  { m:'Jun 2024', occupancy:48, adr:8100,  mix:{direct:35,airbnb:32,booking:23,corporate:10}, hk:1780, cancel:15, los:2.1 },
+  { m:'Jul 2024', occupancy:55, adr:6200,  mix:{direct:33,airbnb:34,booking:24,corporate:9},  hk:1950, cancel:13, los:2.0 },
+  { m:'Aug 2024', occupancy:50, adr:7000,  mix:{direct:34,airbnb:33,booking:23,corporate:10}, hk:1900, cancel:14, los:2.1 },
+  { m:'Sep 2024', occupancy:60, adr:7600,  mix:{direct:37,airbnb:31,booking:22,corporate:10}, hk:1650, cancel:11, los:2.3 },
+  { m:'Oct 2024', occupancy:75, adr:8800,  mix:{direct:41,airbnb:29,booking:20,corporate:10}, hk:1500, cancel:8,  los:2.7 },
+  { m:'Nov 2024', occupancy:80, adr:9100,  mix:{direct:20,airbnb:45,booking:28,corporate:7},  hk:1460, cancel:7,  los:2.8 },
+  { m:'Dec 2024', occupancy:92, adr:11000, mix:{direct:45,airbnb:25,booking:20,corporate:10}, hk:1400, cancel:5,  los:3.4 },
+  { m:'Jan 2025', occupancy:90, adr:10800, mix:{direct:44,airbnb:26,booking:20,corporate:10}, hk:1410, cancel:6,  los:3.3 },
+  { m:'Feb 2025', occupancy:84, adr:9600,  mix:{direct:41,airbnb:28,booking:21,corporate:10}, hk:1420, cancel:7,  los:3.0 },
+  { m:'Mar 2025', occupancy:68, adr:9100,  mix:{direct:40,airbnb:29,booking:21,corporate:10}, hk:1460, cancel:10, los:2.6 },
+  { m:'Apr 2025', occupancy:71, adr:8700,  mix:{direct:40,airbnb:29,booking:21,corporate:10}, hk:1470, cancel:9,  los:2.6 },
+  { m:'May 2025', occupancy:66, adr:8400,  mix:{direct:39,airbnb:30,booking:21,corporate:10}, hk:1490, cancel:10, los:2.5 },
+  { m:'Jun 2025', occupancy:52, adr:8200,  mix:{direct:36,airbnb:32,booking:22,corporate:10}, hk:1740, cancel:14, los:2.2 },
+  { m:'Jul 2025', occupancy:64, adr:8600,  mix:{direct:38,airbnb:32,booking:20,corporate:10}, hk:1620, cancel:10, los:2.4 },
+];
+
+const COMMISSION = { direct:0, airbnb:0.15, booking:0.18, corporate:0.10 };
+function commissionRate(mix){ return (mix.airbnb*COMMISSION.airbnb + mix.booking*COMMISSION.booking + mix.corporate*COMMISSION.corporate)/100; }
+
+const DATA = RAW.map(d => {
+  const cRate = commissionRate(d.mix);
+  const netAdr = d.adr * (1-cRate);
+  return { ...d, cRate, netAdr, revparGross: (d.occupancy/100)*d.adr, revparNet: (d.occupancy/100)*netAdr };
+});
+
+const MARKERS = [
+  { index:2, type:'dip', baseline:[0,1], title:'Occupancy collapse', subtitle:'Early monsoon washout',
+    note:'Unseasonal rain in early March triggered a wave of cancellations, 22% against a roughly 8% norm. Pricing barely moved, so the RevPAR drop traces almost entirely to lost room-nights rather than discounting.' },
+  { index:6, type:'dip', baseline:[3,4,5], title:'Margin bleed', subtitle:'Panic discounting through the lull',
+    note:'Occupancy was propped up through the monsoon slump, but ADR was cut by nearly a quarter to do it. The villa filled rooms at the cost of most of its margin. Occupancy alone would have suggested a healthy month.' },
+  { index:10, type:'dip', baseline:[7,8,9], title:'Strong on paper, weak on the ledger', subtitle:'Channel mix quietly ate the gain',
+    note:'Occupancy and headline rate both improved. But direct bookings fell to 20% of the mix while OTA share jumped to 73%, and the resulting commission drag erased most of the gain, a dip invisible unless you look past gross RevPAR.' },
+  { index:11, type:'growth', baseline:[8,9,10], title:'Peak season pricing power', subtitle:'Rate led the gain, not just demand',
+    note:'ADR climbed roughly 20% into the December peak while occupancy reached 92%, both levers moving together. This is genuine peak-season execution, rate held with confidence, not just strong demand carrying the number on its own.' },
+  { index:14, type:'growth', baseline:[2], title:'The recovery, one year on', subtitle:'Same month, a different result',
+    note:'Against the March 2024 washout, occupancy is up 14 points and cancellations are down from 22% to 10%. Whatever changed in monsoon-readiness or booking flexibility between the two years shows up directly in the ledger.' },
+];
+
+function decompose(marker){
+  const cur = DATA[marker.index];
+  const baseRows = marker.baseline.map(i => DATA[i]);
+  const n = baseRows.length;
+  const base = {
+    occupancy: baseRows.reduce((s,r)=>s+r.occupancy,0)/n,
+    adr: baseRows.reduce((s,r)=>s+r.adr,0)/n,
+    cRate: baseRows.reduce((s,r)=>s+r.cRate,0)/n,
+    netAdr: baseRows.reduce((s,r)=>s+r.netAdr,0)/n,
+  };
+  const baseRevpar = (base.occupancy/100)*base.netAdr;
+  const occEffect = (cur.occupancy/100 - base.occupancy/100) * base.netAdr;
+  const adrEffect = (cur.occupancy/100) * (cur.adr - base.adr) * (1-base.cRate);
+  const totalChange = cur.revparNet - baseRevpar;
+  const channelEffect = totalChange - occEffect - adrEffect;
+  return { base, cur, baseRevpar, occEffect, adrEffect, channelEffect, totalChange };
+}
+
+const fmtINR = n => '₹' + Math.round(n).toLocaleString('en-IN');
+const fmtPct = (n,d=0) => n.toFixed(d) + '%';
+const fmtDelta = n => (n>=0?'+':'') + Math.round(n).toLocaleString('en-IN');
+
+// KPI row
+const last = DATA[DATA.length-1], prev = DATA[DATA.length-2];
+function deltaHtml(value, goodDirection, suffix){
+  if (value === 0) return '<span class="kpi-delta flat">flat</span>';
+  const isUp = value > 0;
+  const isGood = goodDirection === 'down' ? !isUp : isUp;
+  const cls = isGood ? 'up' : 'down';
+  const arrow = isUp ? '&#8593;' : '&#8595;';
+  return `<span class="kpi-delta ${cls}">${arrow} ${isUp?'+':''}${value.toFixed(1)}${suffix}</span>`;
+}
+function kpiCard(label, value, delta, goodDirection, suffix){
+  return `<div class="kpi-card"><div class="kpi-label">${label}</div><div class="kpi-value">${value}</div>${deltaHtml(delta, goodDirection, suffix)}</div>`;
+}
+document.getElementById('kpiGrid').innerHTML =
+  kpiCard('Occupancy', fmtPct(last.occupancy), last.occupancy-prev.occupancy, 'up', 'pt') +
+  kpiCard('Net RevPAR', fmtINR(last.revparNet), ((last.revparNet-prev.revparNet)/prev.revparNet)*100, 'up', '%') +
+  kpiCard('ADR', fmtINR(last.adr), ((last.adr-prev.adr)/prev.adr)*100, 'up', '%') +
+  kpiCard('Avg length of stay', last.los.toFixed(1)+' nt', last.los-prev.los, 'up', ' nt') +
+  kpiCard('Cancellation rate', fmtPct(last.cancel), last.cancel-prev.cancel, 'down', 'pt');
+
+// RevPAR chart
+let selectedIndex = null;
+const labels = DATA.map(d=>d.m);
+const gross = DATA.map(d=>d.revparGross);
+const net = DATA.map(d=>d.revparNet);
+
+function pointStyles(){
+  return labels.map((_, i) => {
+    const marker = MARKERS.find(m => m.index === i);
+    if (!marker) return { r:0, bg:T.blue };
+    const base = marker.type === 'growth' ? T.green : T.red;
+    const isSel = selectedIndex === i;
+    return { r: isSel ? 7 : 5, bg: isSel ? T.gold : base };
+  });
+}
+
+const styles = pointStyles();
+const revparChart = new Chart(document.getElementById('revparChart'), {
+  type: 'line',
+  data: {
+    labels,
+    datasets: [
+      { label:'Gross RevPAR', data: gross, borderColor: T.inkFaint, borderDash:[4,4], borderWidth:1.5, pointRadius:0, fill:false, tension:0.3 },
+      { label:'Net RevPAR', data: net, borderColor: T.blue, borderWidth:2.25, fill:false, tension:0.3,
+        pointRadius: styles.map(s=>s.r), pointBackgroundColor: styles.map(s=>s.bg), pointBorderColor: T.bg, pointBorderWidth:2 },
+    ],
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { display:false },
+      tooltip: { backgroundColor: T.panel, borderColor: T.rule, borderWidth:1, titleColor: T.inkFaint, bodyColor: T.ink, padding:10, cornerRadius:6,
+        callbacks: { label: (ctx) => ctx.dataset.label + ': ' + fmtINR(ctx.parsed.y) } },
+    },
+    scales: {
+      x: { ticks:{ color:T.inkFaint, font:{size:11} }, grid:{ display:false } },
+      y: { ticks:{ color:T.inkFaint, font:{size:11}, callback:(v)=>(v/1000).toFixed(0)+'k' }, grid:{ color:T.ruleFaint } },
+    },
+    onClick: (evt) => {
+      const pts = revparChart.getElementsAtEventForMode(evt, 'nearest', { intersect:true }, true);
+      if (!pts.length) return;
+      const idx = pts[0].index;
+      const marker = MARKERS.find(m => m.index === idx);
+      if (!marker) return;
+      selectedIndex = (selectedIndex === idx) ? null : idx;
+      refreshChartPoints();
+      renderPanel();
+    },
+    onHover: (evt, elements) => { evt.native.target.style.cursor = elements.length ? 'pointer' : 'default'; },
+  },
+});
+
+function refreshChartPoints(){
+  const s = pointStyles();
+  revparChart.data.datasets[1].pointRadius = s.map(x=>x.r);
+  revparChart.data.datasets[1].pointBackgroundColor = s.map(x=>x.bg);
+  revparChart.update();
+}
+
+function renderPanel(){
+  const panel = document.getElementById('panel');
+  const placeholder = document.getElementById('placeholder');
+  const marker = MARKERS.find(m => m.index === selectedIndex);
+  if (!marker) { panel.style.display = 'none'; placeholder.style.display = 'block'; return; }
+  placeholder.style.display = 'none';
+  panel.style.display = 'block';
+  const accent = marker.type === 'growth' ? T.green : T.gold;
+  const noteLabel = marker.type === 'growth' ? 'Growth note' : 'Ledger note';
+  panel.style.borderLeft = `2px solid ${accent}`;
+  document.getElementById('panelEyebrow').style.color = accent;
+  document.getElementById('panelEyebrow').textContent = `${noteLabel} · ${DATA[marker.index].m}`;
+  document.getElementById('panelTitle').textContent = marker.title;
+  document.getElementById('panelSub').textContent = marker.subtitle;
+  document.getElementById('panelNote').textContent = marker.note;
+
+  const d = decompose(marker);
+  const maxAbs = Math.max(Math.abs(d.occEffect), Math.abs(d.adrEffect), Math.abs(d.channelEffect)) || 1;
+  const bars = [
+    ['Occupancy effect', d.occEffect],
+    ['Pricing effect', d.adrEffect],
+    ['Channel mix effect', d.channelEffect],
+  ];
+  document.getElementById('ledgerBars').innerHTML = bars.map(([label, val]) => {
+    const isNeg = val < 0;
+    const width = Math.min(100, (Math.abs(val)/maxAbs)*100) / 2;
+    return `<div class="ledger-bar-row">
+      <div class="ledger-bar-top"><span class="ledger-bar-label">${label}</span><span class="mono" style="color:${isNeg?T.red:T.green}">${fmtDelta(val)}</span></div>
+      <div class="ledger-track">
+        <div class="ledger-fill" style="${isNeg ? 'right:50%;' : 'left:50%;'} width:${width}%; background:${isNeg?T.red:T.green};"></div>
+        <div class="ledger-mid"></div>
+      </div>
+    </div>`;
+  }).join('');
+  document.getElementById('totalChange').textContent = fmtDelta(d.totalChange);
+  document.getElementById('totalChange').style.color = d.totalChange < 0 ? T.red : T.green;
+
+  const rows = [
+    ['Occupancy', fmtPct(d.base.occupancy,0), fmtPct(d.cur.occupancy,0)],
+    ['ADR', fmtINR(d.base.adr), fmtINR(d.cur.adr)],
+    ['Commission rate', fmtPct(d.base.cRate*100,1), fmtPct(d.cur.cRate*100,1)],
+  ];
+  document.getElementById('compareRows').innerHTML = rows.map(([label,b,c]) =>
+    `<div class="compare-row"><span class="compare-label">${label}</span><span class="compare-val mono">${b} &#8594; <b>${c}</b></span></div>`
+  ).join('');
+}
+document.getElementById('closePanel').addEventListener('click', () => { selectedIndex = null; refreshChartPoints(); renderPanel(); });
+renderPanel();
+
+// Channel mix chart
+const channelColors = { Direct: T.blue, Airbnb: T.red, 'Booking.com': T.teal, Corporate: T.gold };
+document.getElementById('channelLegend').innerHTML = Object.entries(channelColors).map(([k,v]) =>
+  `<span class="legend-item"><span class="dot" style="background:${v}"></span>${k}</span>`).join('');
+
+new Chart(document.getElementById('channelChart'), {
+  type: 'line',
+  data: {
+    labels,
+    datasets: Object.keys(channelColors).map(key => {
+      const field = key === 'Direct' ? 'direct' : key === 'Airbnb' ? 'airbnb' : key === 'Booking.com' ? 'booking' : 'corporate';
+      return { label:key, data: DATA.map(d=>d.mix[field]), borderColor: channelColors[key], backgroundColor: channelColors[key]+'66', fill:true, pointRadius:0, tension:0.3 };
+    }),
+  },
+  options: {
+    responsive:true, maintainAspectRatio:false,
+    plugins: { legend:{display:false}, tooltip:{ backgroundColor:T.panel, borderColor:T.rule, borderWidth:1, titleColor:T.inkFaint, bodyColor:T.ink, padding:10, cornerRadius:6, callbacks:{ label:(ctx)=>ctx.dataset.label+': '+ctx.parsed.y+'%' } } },
+    scales: {
+      x: { stacked:true, ticks:{ color:T.inkFaint, font:{size:11} }, grid:{ display:false } },
+      y: { stacked:true, min:0, max:100, ticks:{ color:T.inkFaint, font:{size:11}, callback:(v)=>v+'%' }, grid:{ color:T.ruleFaint } },
+    },
+  },
+});
+
+// Cost chart
+new Chart(document.getElementById('costChart'), {
+  type: 'bar',
+  data: { labels, datasets: [{ label:'Cost / night', data: DATA.map(d=>d.hk), backgroundColor: T.teal, borderRadius:3 }] },
+  options: {
+    responsive:true, maintainAspectRatio:false,
+    plugins: { legend:{display:false}, tooltip:{ backgroundColor:T.panel, borderColor:T.rule, borderWidth:1, titleColor:T.inkFaint, bodyColor:T.ink, padding:10, cornerRadius:6, callbacks:{ label:(ctx)=>fmtINR(ctx.parsed.y) } } },
+    scales: {
+      x: { ticks:{ color:T.inkFaint, font:{size:11} }, grid:{ display:false } },
+      y: { ticks:{ color:T.inkFaint, font:{size:11}, callback:(v)=>(v/1000).toFixed(1)+'k' }, grid:{ color:T.ruleFaint } },
+    },
+  },
+});
+</script>
+</body>
+</html>
